@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="familie">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name ="personen">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="person" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" type="xs:string"/>
+                                        <xs:element name="vorname" type="xs:string"/>
+                                        <xs:element name="geburtsort" type="xs:string"/>
+                                        <xs:element name="geburtsdatum" type="xs:date"/>
+                                        <xs:element name="sterbeort" type="xs:string"/>
+                                        <xs:element name="todesdatum" type="xs:date"/>
+                                        <xs:element name="geschlecht">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="m|w" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+                                        <xs:element name="bild" type="xs:string"/>
+                                        <xs:element name="sonstiges" type="xs:string"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:positiveInteger"></xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="beziehungen" >
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="partner"  maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="id" type="xs:positiveInteger"/>
+                                    <xs:attribute name="partnerEins" type="xs:positiveInteger"/>
+                                    <xs:attribute name="partnerZwei" type="xs:positiveInteger"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="kind"  maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="id" type="xs:positiveInteger"/>
+                                    <xs:attribute name="elternteil" type="xs:positiveInteger"/>
+                                    <xs:attribute name="kind" type="xs:positiveInteger"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="token" type="xs:positiveInteger"></xs:attribute>
+        </xs:complexType>
+        <xs:unique name="PersonenID">
+            <xs:selector xpath="personen/person"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+        <xs:unique name="BeziehungsID">
+            <xs:selector xpath="beziehungen/*"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+        <xs:unique name="BeziehungsPartnerID">
+            <xs:selector xpath="beziehungen/*"/>
+            <xs:field xpath="@elternteil"/>
+            <xs:field xpath="@kind"/>
+        </xs:unique>
+    </xs:element>
+</xs:schema>
