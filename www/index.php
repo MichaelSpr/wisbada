@@ -5,43 +5,49 @@
 		<title>Stammbaum</title>
 		<script type="text/javascript" src="libs/jquery-1.6.1.min.js"></script>
 		<script type="text/javascript" src="libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
-		<!-- <script type="text/javascript" src="stammbaum.js"></script>-->
+		<script type="text/javascript" src="libs/xslt.js-3.2/xslt.js"></script>
+		<script type="text/javascript" src="stammbaum.js"></script>
 		<script type="text/javascript">/* Das Script */
 			var rootPerson = null;
 			var board = null;
-			
+
 			function loadHTMLView() {
-				$('#board').slideUp( function() {
-					$('#board').text('html');
+				$('#board').slideUp(function() {
+					$('#board').children().remove();
+					// init the persons....
+					setRootPerson(new Person("Peter", "Steinberg"));
+					rootPerson.setFather(new Person("Franz", "Müller"));
+					//rootPerson.setMother(new Person("Petra", "Maier"));
 					$('#board').slideDown();
 				});
-				
 			}
+
 			function loadSVGView() {
 				$('#board').slideUp(function() {
+					$('#board').children().remove();
 					$.get('svg.xml', function(xml) {
 						$.get('svg.xsl', function(xsl) {
-					 		$('#board').xslt(xml , xsl ).slideDown( function() {							
+							$('#board').xslt(xml , xsl ).slideDown(function() {
 								$('#board > svg').attr('width', ($('#board').innerWidth() - 20));
 								$('#board > svg').attr('height', ($('#board').innerHeight() - 20));
-					 		});
-					 	}, 'text');
+							});
+						}, 'text');
 					}, 'text');
 				});
 			}
-			
+
 			// Die Zeichen-Funktion beim Laden der Seite aufrufen
-			$(document).ready(function(){
+			$(document).ready(function() {
 				$('#board').hide();
-				$('#board').css('height', ($(document).height() - $('#menu').height() -80) + 'px' );
+				$('#board').css('height', ($(document).height() -  $('#menu').height() - 80) + 'px');
+
 				loadHTMLView();
-				
+
 			});
-		</script>
+</script>
 		<link type="text/css" rel="stylesheet" href="style.css" />
-		<style type="text/css">		
-		/* das Style */
-		</style>
+		<style type="text/css">		/* das Style */
+</style>
 	</head>
 	<body>
 		<div id="menu" class="mainmenu">

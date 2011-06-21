@@ -20,22 +20,24 @@ body {
 	background-color: #eeeeee;
 	border-radius: 20px;
 	box-shadow: 4px 4px  4px 4px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
 }
 /* the 'Person' container */
-.container {
-	position: absolute;
+.person {
+	position: relative;
 	border-radius: 5px;
 	background-color: #FFFFFF;
 	box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
 	top: 0px;
 	left: 0px;
 }
-.container span {
+.person span {
 	margin: 10px;
 }
 .rootperson {
 	border: 1px solid red;
 }
+
 /* menu styles */
 .mainmenu {
 	margin: 0px auto;
