@@ -1,0 +1,72 @@
+
+/*common stuff */
+body {
+	padding: 0px;
+	margin: 0px;
+}
+#copyleft {
+	font-size: 60%;
+	text-align: center;
+	padding: 8px;
+}
+#copyleft a {
+	text-decoration: none;
+	color: #777777;
+}
+/* the main board */
+#board {
+	margin: 0px auto;
+	width: 90%;
+	background-color: #eeeeee;
+	border-radius: 20px;
+	box-shadow: 4px 4px  4px 4px rgba(0, 0, 0, 0.4);
+}
+/* the 'Person' container */
+.container {
+	position: absolute;
+	border-radius: 5px;
+	background-color: #FFFFFF;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+	top: 0px;
+	left: 0px;
+}
+.container span {
+	margin: 10px;
+}
+.rootperson {
+	border: 1px solid red;
+}
+/* menu styles */
+.mainmenu {
+	margin: 0px auto;
+	width: 90%;
+}
+.mainmenu> ul {
+	width: 100%;
+	background-color: #d7a455;
+	height: 60px;
+	padding: 0px;
+	margin: 0px;
+	display: table;
+	box-shadow: 4px 4px  4px 4px rgba(0, 0, 0, 0.4);
+	border-radius: 20px;
+	margin-bottom: 20px;
+}
+.mainmenu> ul> li {
+	margin: 0;
+	padding: 0;
+	display: table-cell;
+}
+.mainmenu> ul a {
+	display: block;
+	text-decoration: none;
+	font-size: 24px;
+	color: #FFFFFF;
+	background-color: #886836;
+	text-align:center;
+	vertical-align:middle;
+	margin-top: 15px;
+}
+.mainmenu> ul a:hover {
+	background-color: #70562c;
+}
