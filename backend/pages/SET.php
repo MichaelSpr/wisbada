@@ -1,4 +1,38 @@
 <?php
+//Funktion die die Errorausgabe abändert. Dadurch wird sie nicht von der Funktion schemaValidate als Exception ausgegeben, sondern abgefangen!
+function libxml_display_error($error)
+{
+    $return = "<br/>\n";
+    switch ($error->level) {
+        case LIBXML_ERR_WARNING:
+            $return .= "<b>Warning $error->code</b>: ";
+            break;
+        case LIBXML_ERR_ERROR:
+            $return .= "<b>Error $error->code</b>: ";
+            break;
+        case LIBXML_ERR_FATAL:
+            $return .= "<b>Fatal Error $error->code</b>: ";
+            break;
+    }
+    $return .= trim($error->message);
+    if ($error->file) {
+        $return .=    " in <b>$error->file</b>";
+    }
+    $return .= " on line <b>$error->line</b>\n";
+
+    return $return;
+}
+//Funktion die die Errorausgabe abändert. Dadurch wird sie nicht von der Funktion schemaValidate als Exception ausgegeben, sondern abgefangen!
+function libxml_display_errors() {
+    $errors = libxml_get_errors();
+    foreach ($errors as $error) {
+        print libxml_display_error($error);
+    }
+    libxml_clear_errors();
+}
+
+// User Error Handling erlauben
+libxml_use_internal_errors(true);
 
 //TokenID vorhande?
 if (isset($_SESSION["token"])) {
@@ -13,7 +47,7 @@ if (isset($_SESSION["token"])) {
 
         //Übergebene XML validieren
         if ($dom->schemaValidate($this->getConfigValue("XSDPath"))) {
-            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "XML erfolgreich validiert: " . htmlentities($_POST["xml"], ENT_QUOTES));
+            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "XML erfolgreich validiert: " . htmlspecialchars($_POST["xml"], ENT_QUOTES));
             $this->Data->connect();
 
             //Wurde als POST der Delete Flag gesetzt? Alle Einträge dieser Token werden gelöscht!
@@ -49,7 +83,7 @@ if (isset($_SESSION["token"])) {
                                     $headline[$i->nodeName] = 1;
                                 }
                             } else {
-                                $headline[$i->nodeName] = htmlentities($i->nodeValue, ENT_QUOTES);
+                                $headline[$i->nodeName] = htmlspecialchars($i->nodeValue, ENT_QUOTES);
                             }
                         }
 
@@ -128,6 +162,7 @@ if (isset($_SESSION["token"])) {
             //0 mit Fehlermeldung zurückgeben
             $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::WARNING, "Validation der XML gegen die XSD ist fehlgeschlagen!");
             echo "0;Validation fehlgeschlagen!";
+			libxml_display_errors();
         }
     } else {
         //0 mit Fehlermeldung zurückgeben

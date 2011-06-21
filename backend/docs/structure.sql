@@ -36,6 +36,6 @@ CREATE TABLE log (
    data text,
   PRIMARY KEY (id)
 );
-INSERT INTO stammbaum VALUES (1,'Example');
+INSERT INTO stammbaum VALUES (1,'3552043194');
 INSERT INTO beziehungen VALUES (1,2,2,1,3),(1,3,2,2,3),(1,1,1,1,2);
 INSERT INTO personen VALUES (1,1,'Simpson','Homer Jay','Springfield','1989-12-17','','1900-01-01',0,'',''),(1,2,'Simpson','Marjorie (Marge)','Springfield','1989-12-17','','1900-01-01',1,'',''),(1,3,'Simpson','Bartholomew JoJo (Bart)','Springfield','1989-12-17','','1900-01-01',0,'','');

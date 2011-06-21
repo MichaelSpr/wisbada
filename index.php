@@ -11,7 +11,7 @@ require_once("backend/core/class.Context.php");
 
 //Fehler ausgeben anstatt mit HTTP Error 500!
 error_reporting(E_ALL);
-ini_set("display_errors", OFF);
+ini_set("display_errors", ON);
 
 //Context initialisieren und das Ganze ins Rollen bringen!
 /** @var core/class.Context.php */
