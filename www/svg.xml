@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="svg.xsl" type="text/xsl"?>
+<person>
+ <name>
+  <firstname>Paul</firstname>
+  <lastname>McCartney</lastname>
+ </name>
+ <job>Singer</job>
+ <gender>Male</gender>
+</person>

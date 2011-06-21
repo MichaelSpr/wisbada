@@ -167,9 +167,10 @@ function setRootPerson(p) {
 	}
 	rootPerson = p;
 	console.log("new root person: " + rootPerson.displayName());
+	rootPerson.show();
 	
-	p.expand();
 	p.container.addCls('rootperson');
+	p.expand();
 	p.show();
 	//p.alignRelatives();
 }
