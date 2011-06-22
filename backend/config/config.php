@@ -19,7 +19,7 @@ $this->ConfigDB["LogLevel"] = 0;
 
 //SQL Benutzerdaten sowie Datenbank
 $this->ConfigDB["DBServer"] = "localhost";
-$this->ConfigDB["DBUser"] = "";
-$this->ConfigDB["DBPass"] = "";
-$this->ConfigDB["DBName"] = "";
+$this->ConfigDB["DBUser"] = "dh";
+$this->ConfigDB["DBPass"] = "test136";
+$this->ConfigDB["DBName"] = "dh";
 ?>
