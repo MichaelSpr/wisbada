@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /ProjektStammbaum/9_AktuelleVersionAusDemGit/
+RewriteRule ^([0-9a-zA-Z]{8,10})/?$ index.php?token=$1 [L]
+RewriteRule ^([a-zA-Z]{3,7})/?$ index.php?page=$1 [L]

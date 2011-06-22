@@ -3,10 +3,10 @@
 	<head>
 		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8">
 		<title>Stammbaum</title>
-		<script type="text/javascript" src="libs/jquery-1.6.1.min.js"></script>
-		<script type="text/javascript" src="libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
-		<script type="text/javascript" src="libs/xslt.js-3.2/xslt.js"></script>
-		<script type="text/javascript" src="stammbaum.js"></script>
+		<script type="text/javascript" src="www/libs/jquery-1.6.1.min.js"></script>
+		<script type="text/javascript" src="www/libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
+		<script type="text/javascript" src="www/libs/xslt.js-3.2/xslt.js"></script>
+		<script type="text/javascript" src="www/stammbaum.js"></script>
 		<script type="text/javascript">/* Das Script */
 			var rootPerson = null;
 			var board = null;
@@ -25,8 +25,8 @@
 			function loadSVGView() {
 				$('#board').slideUp(function() {
 					$('#board').children().remove();
-					$.get('svg.xml', function(xml) {
-						$.get('svg.xsl', function(xsl) {
+					$.get('www/svg.xml', function(xml) {
+						$.get('www/svg.xsl', function(xsl) {
 							$('#board').xslt(xml , xsl ).slideDown(function() {
 								$('#board > svg').attr('width', ($('#board').innerWidth() - 20));
 								$('#board > svg').attr('height', ($('#board').innerHeight() - 20));
@@ -45,7 +45,7 @@
 
 			});
 </script>
-		<link type="text/css" rel="stylesheet" href="style.css" />
+		<link type="text/css" rel="stylesheet" href="www/style.css" />
 		<style type="text/css">		/* das Style */
 </style>
 	</head>
