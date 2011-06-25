@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="de">
 	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8">
+		<meta charset="utf-8" />
 		<title>Stammbaum</title>
 		
 		<!--Zur lokalen Entwicklung: <base href="../" />-->
-		<link rel="icon" href="www/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="www/img/favicon.ico" type="image/x-icon" />
 		
 		<script type="text/javascript" src="www/libs/jquery-1.6.1.min.js"></script>
 		<script type="text/javascript" src="www/libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
@@ -85,10 +85,9 @@
 			</ul>
 		</div>
 		<div id="board">
-			&nbsp;
 		</div>
 		<div id="copyleft">
-			&copy; 2011 wisbada team
+			&#169; 2011 wisbada team
 			<a href="http://www.dhbw-karlsruhe.de/">DHBW Karlsruhe</a>
 		</div>
 		
