@@ -1,74 +1,142 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+em {
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+strong {
+	font-weight: bold;
+}
 
 /*common stuff */
 body {
-	padding: 0px;
-	margin: 0px;
+	background: url(img/bg.jpg) top center no-repeat #66af24;
 }
+
+#wrap {
+	width: 95%;
+	min-width: 960px;
+	margin: 10px auto;
+}
+
 #copyleft {
-	font-size: 60%;
+	font-size: 0.8em;
 	text-align: center;
 	padding: 8px;
+	color: #FFF;
 }
 #copyleft a {
 	text-decoration: none;
-	color: #777777;
+	color: #DDD;
 }
 /* the main board */
 #board {
-	margin: 0px auto;
-	width: 90%;
-	background-color: #eeeeee;
-	border-radius: 20px;
-	box-shadow: 4px 4px  4px 4px rgba(0, 0, 0, 0.4);
+	background-color: rgba(255,255,255,0.9);
+	border-radius: 4px;
+	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
 	overflow: hidden;
-}
-/* the 'Person' container */
-.person {
-	position: relative;
-	border-radius: 5px;
-	background-color: #FFFFFF;
-	box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-	top: 0px;
-	left: 0px;
-}
-.person span {
-	margin: 10px;
-}
-.rootperson {
-	border: 1px solid red;
 }
 
 /* menu styles */
-.mainmenu {
-	margin: 0px auto;
-	width: 90%;
-}
-.mainmenu> ul {
-	width: 100%;
-	background-color: #d7a455;
-	height: 60px;
-	padding: 0px;
-	margin: 0px;
-	display: table;
-	box-shadow: 4px 4px  4px 4px rgba(0, 0, 0, 0.4);
-	border-radius: 20px;
-	margin-bottom: 20px;
-}
-.mainmenu> ul> li {
-	margin: 0;
-	padding: 0;
-	display: table-cell;
-}
-.mainmenu> ul a {
+.mainmenu ul {
 	display: block;
-	text-decoration: none;
-	font-size: 24px;
-	color: #FFFFFF;
-	background-color: #886836;
-	text-align:center;
-	vertical-align:middle;
-	margin-top: 15px;
+	padding: 0 4px;
+	margin: 0 0 20px 0;
+	
+	background-color: rgba(255,255,255,0.9);
+	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
+	border-radius: 4px;
+	
 }
-.mainmenu> ul a:hover {
-	background-color: #70562c;
+.mainmenu li {
+	display: block;
+	width: auto;
+	float: left;
+}
+.mainmenu a {
+	display: block;
+	height: 45px;
+	padding: 0 20px;
+	
+	text-decoration: none;
+	text-align:center;
+	line-height: 45px;
+	
+	color: #99c00c;
+	
+	cursor: pointer;
+}
+.mainmenu li:hover a {
+	color: #FFFFFF;
+	background-color: #99c00c;
+}
+
+/* Clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
 }

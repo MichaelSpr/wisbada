@@ -3,6 +3,10 @@
 	<head>
 		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8">
 		<title>Stammbaum</title>
+		
+		<!--Zur lokalen Entwicklung: <base href="../" />-->
+		<link rel="icon" href="www/img/favicon.ico" type="image/x-icon">
+		
 		<script type="text/javascript" src="www/libs/jquery-1.6.1.min.js"></script>
 		<script type="text/javascript" src="www/libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
 		<script type="text/javascript" src="www/libs/xslt.js-3.2/xslt.js"></script>
@@ -50,28 +54,33 @@
 </style>
 	</head>
 	<body>
+		<div id="wrap">
+		
 		<div id="menu" class="mainmenu">
-			<ul>
-				<li>
-					<a href="#">neuer Stammbaum</a>
+			<ul class="clearfix">
+				<li class="logo">
+					<a><img src="www/img/logo.png" alt="Stammbaum" width="167" height="42" /></a>
 				</li>
 				<li>
-					<a href="#" onclick="javascript:loadSVGView();">Darstellung SVG</a>
+					<a>neuer Stammbaum</a>
 				</li>
 				<li>
-					<a href="#" onclick="javascript:loadHTMLView();">Darstellung HTML</a>
+					<a onclick="javascript:loadSVGView();">Darstellung SVG</a>
 				</li>
 				<li>
-					<a href="#">Export</a>
+					<a onclick="javascript:loadHTMLView();">Darstellung HTML</a>
 				</li>
 				<li>
-					<a href="#">Import</a>
+					<a>Export</a>
 				</li>
 				<li>
-					<a href="#">Permalink</a>
+					<a>Import</a>
 				</li>
 				<li>
-					<a href="#">Verteilen</a>
+					<a>Permalink</a>
+				</li>
+				<li>
+					<a>Verteilen</a>
 				</li>
 			</ul>
 		</div>
@@ -79,8 +88,10 @@
 			&nbsp;
 		</div>
 		<div id="copyleft">
-			&copy;2011 wisbada team
-			<a href="http://www.dh-karlsruhe.de/">DH-Karlsruhe</a>
+			&copy; 2011 wisbada team
+			<a href="http://www.dhbw-karlsruhe.de/">DHBW Karlsruhe</a>
+		</div>
+		
 		</div>
 	</body>
 </html>
