@@ -79,8 +79,9 @@ body {
 }
 /* the main board */
 #board {
+	background-color: #FFFFFF;
 	background-color: rgba(255,255,255,0.9);
-	border-radius: 4px;
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
 	overflow: hidden;
 }
@@ -91,11 +92,13 @@ body {
 	padding: 0 4px;
 	margin: 0 0 20px 0;
 	
+	background-color: #FFFFFF;
 	background-color: rgba(255,255,255,0.9);
-	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
-	border-radius: 4px;
 	
+	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 }
+
 .mainmenu li {
 	display: block;
 	width: auto;
@@ -104,7 +107,7 @@ body {
 .mainmenu a {
 	display: block;
 	height: 45px;
-	padding: 0 20px;
+	padding: 0 15px;
 	
 	text-decoration: none;
 	text-align:center;
@@ -118,6 +121,78 @@ body {
 	color: #FFFFFF;
 	background-color: #99c00c;
 }
+.mainmenu li.logo:hover a {
+	background-color: transparent;
+}
+.mainmenu li.logo a {
+	padding: 0 10px;
+}
+
+/* LIST */
+#board ul {
+	 margin: 0 auto;
+}
+
+.person {
+	float: left;
+	width: 260px;
+}
+
+.person > div > div > div {
+	padding: 5px;
+	height: 40px;
+	background: #FFF;
+	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
+	border: 1px solid black;
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
+}
+
+.paar {
+	float: left;
+}
+
+.paar .wrap{
+	width: 520px;
+	margin: 0 auto;
+}
+		
+/* VERBINDUNGSLINIEN */
+.person .top {
+	padding: 15px 5px 0 5px;
+	background: url(img/sprite-v1.png) top left no-repeat transparent;
+}
+
+.person .bottom {
+	padding-bottom: 15px;
+	background: url(img/sprite-v1-bottom.png) top left no-repeat transparent;
+}
+
+ul ul > .person > .top, ul ul > .paar > div > .person > .top {
+	background-position: -780px 0;
+}
+
+ul ul > .paar > div > .person.noconnection > .top {
+	background-position: -1300px 0;
+}
+
+ul ul > .person.first > .top {
+	background-position: -260px 0;
+}
+
+ul ul > li.last > .top {
+	background-position: -520px 0;
+}
+
+ul ul > li.first.last > .top {
+	background-position: -1040px 0;
+}
+
+.paar.parent > div {
+	padding-bottom: 15px;
+	background: url(img/sprite-v1.png) top left no-repeat transparent;
+	background-position: -1560px bottom;
+}
+
 
 /* Clearfix */
 .clearfix:after {
