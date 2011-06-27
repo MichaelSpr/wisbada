@@ -64,10 +64,10 @@
 					<a>neuer Stammbaum</a>
 				</li>
 				<li>
-					<a onclick="javascript:loadSVGView();">Darstellung SVG</a>
+					<a onclick="loadSVGView();">Darstellung SVG</a>
 				</li>
 				<li>
-					<a onclick="javascript:loadHTMLView();">Darstellung HTML</a>
+					<a onclick="loadHTMLView();">Darstellung HTML</a>
 				</li>
 				<li>
 					<a>Export</a>
