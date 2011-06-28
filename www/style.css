@@ -138,8 +138,9 @@ body {
 	width: 260px;
 }
 
-.person > div > div > div {
+.person > div {
 	padding: 5px;
+	margin: 0 5px;
 	height: 40px;
 	background: #FFF;
 	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
@@ -157,38 +158,36 @@ body {
 }
 		
 /* VERBINDUNGSLINIEN */
-.person .top {
-	padding: 15px 5px 0 5px;
+.person:before {
+	display: block;
+	height: 15px;
+	padding: 0 5px 0 5px;
 	background: url(img/sprite-v1.png) top left no-repeat transparent;
+	content: " ";
 }
 
-.person .bottom {
-	padding-bottom: 15px;
-	background: url(img/sprite-v1-bottom.png) top left no-repeat transparent;
-}
-
-ul ul > .person > .top, ul ul > .paar > div > .person > .top {
+ul ul > .person:before, ul ul > .paar > div > .person:before {
 	background-position: -780px 0;
 }
 
-ul ul > .paar > div > .person.noconnection > .top {
+ul ul > .paar > div > .person.noconnection:before {
 	background-position: -1300px 0;
 }
 
-ul ul > .person.first > .top {
+ul ul > .person.first:before {
 	background-position: -260px 0;
 }
 
-ul ul > li.last > .top {
+ul ul > .person.last:before {
 	background-position: -520px 0;
 }
 
-ul ul > li.first.last > .top {
+ul ul > .person.first.last:before {
 	background-position: -1040px 0;
 }
 
 .paar.parent > div {
-	padding-bottom: 15px;
+	padding-bottom: 30px;
 	background: url(img/sprite-v1.png) top left no-repeat transparent;
 	background-position: -1560px bottom;
 }

@@ -97,61 +97,47 @@
 				<li class="paar parent">
 					<div class="wrap clearfix">
 						<div class="person first root">
-							<div class="top"><div class="bottom">
-								<div>
-									<h4>Homer Simpson</h4>
-								</div>
-							</div></div>
+							<div>
+								<h4>Homer Simpson</h4>
+							</div>
 						</div>
 						<div class="person last root">
-							<div class="top"><div class="bottom">
-								<div>
-									<h4>Marge Simpson <em>(geb. Bouvier)</em></h4>
-								</div>
-							</div></div>
+							<div>
+								<h4>Marge Simpson <em>(geb. Bouvier)</em></h4>
+							</div>
 						</div>
 					</div>
 					<ul class="clearfix" style="width: 1040px;">
 						<li class="person first">
-							<div class="top"><div class="bottom">
-								<div>
-									<h4>Bart Simpson</h4>
-								</div>
-							</div></div>
+							<div>
+								<h4>Bart Simpson</h4>
+							</div>
 						</li>
 						<li class="paar parent">
 							<div class="wrap clearfix">
 								<div class="person">
-									<div class="top"><div class="bottom">
-										<div>
-											<h4>Lisa Simpson</h4>
-										</div>
-									</div></div>
+									<div>
+										<h4>Lisa Simpson</h4>
+									</div>
 								</div>
 								<div class="person noconnection">
-									<div class="top"><div class="bottom">
-										<div>
-											<h4><em>Lisas zuknüftiger Mann</em></h4>
-										</div>
-									</div></div>
+									<div>
+										<h4><em>Lisas zuknüftiger Mann</em></h4>
+									</div>
 								</div>
 							</div>
 							<ul class="clearfix" style="width: 260px;">
 								<li class="person first last">
-									<div class="top"><div class="bottom">
-										<div>
-											<h4><em>Lisas Kind</em></h4>
-										</div>
-									</div></div>
+									<div>
+										<h4><em>Lisas Kind</em></h4>
+									</div>
 								</li>
 							</ul>
 						</li>
 						<li class="person last">
-							<div class="top"><div class="bottom">
-								<div>
-									<h4>Margaret "Maggie" Simpson</h4>
-								</div>
-							</div></div>
+							<div>
+								<h4>Margaret "Maggie" Simpson</h4>
+							</div>
 						</li>
 					</ul>
 				</li>
