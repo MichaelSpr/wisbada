@@ -56,6 +56,10 @@ strong {
 	font-weight: bold;
 }
 
+html, body {
+	height: 100%;
+}
+
 /*common stuff */
 body {
 	background: url(img/bg.jpg) top center no-repeat #66af24;
@@ -64,7 +68,8 @@ body {
 #wrap {
 	width: 95%;
 	min-width: 960px;
-	margin: 10px auto;
+	margin: 0 auto;
+	padding: 10px 0;
 }
 
 #copyleft {
