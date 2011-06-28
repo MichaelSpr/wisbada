@@ -56,10 +56,6 @@ strong {
 	font-weight: bold;
 }
 
-html, body {
-	height: 100%;
-}
-
 /*common stuff */
 body {
 	background: url(img/bg.jpg) top center no-repeat #66af24;
