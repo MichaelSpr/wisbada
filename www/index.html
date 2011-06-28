@@ -33,9 +33,9 @@
 					// than remove content
 					$('#board').children().remove();
 					// than load the svg.xml using ajax
-					$.get('www/svg.xml', function(xml) {
+					$.get('svg.xml', function(xml) {
 						// than load the xsl using ajax
-						$.get('www/svg.xsl', function(xsl) {
+						$.get('svg.xsl', function(xsl) {
 							// xml and xsl are ready.
 							// so do the xsl-transformation
 							$('#board').xslt(xml , xsl ).slideDown(function() {
