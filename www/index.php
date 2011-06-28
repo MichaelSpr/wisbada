@@ -4,33 +4,44 @@
 		<meta charset="utf-8" />
 		<title>Stammbaum</title>
 		
-		<!--Zur lokalen Entwicklung: <base href="../" />-->
+		<!--For local development: <base href="../" />-->
 		<link rel="icon" href="www/img/favicon.ico" type="image/x-icon" />
 		
 		<script type="text/javascript" src="www/libs/jquery-1.6.1.min.js"></script>
 		<script type="text/javascript" src="www/libs/xslt.js-3.2/jquery.xslt.pack.js"></script>
 		<script type="text/javascript" src="www/libs/xslt.js-3.2/xslt.js"></script>
 		<script type="text/javascript" src="www/stammbaum.js"></script>
-		<script type="text/javascript">/* Das Script */
+		<script type="text/javascript">/* the Script */
 			var rootPerson = null;
 			var board = null;
 
 			function loadHTMLView() {
 				var board = $('#board');
 				
-				board.slideUp(function() {		
+				// slide the board up
+				board.slideUp(function() {	
+					// than remove any content from the board
 					board.children().remove();
+					// fill the board with the prepared html content
 					board.html( jQuery('#tmp').html() );
+					// finally show the board again
 					board.slideDown();
 				});
 			}
 
 			function loadSVGView() {
+				// hide the board
 				$('#board').slideUp(function() {
+					// than remove content
 					$('#board').children().remove();
+					// than load the svg.xml using ajax
 					$.get('www/svg.xml', function(xml) {
+						// than load the xsl using ajax
 						$.get('www/svg.xsl', function(xsl) {
+							// xml and xsl are ready.
+							// so do the xsl-transformation
 							$('#board').xslt(xml , xsl ).slideDown(function() {
+								// finally slide down to the original width and height
 								$('#board > svg').attr('width', ($('#board').innerWidth() - 20));
 								$('#board > svg').attr('height', ($('#board').innerHeight() - 20));
 							});
@@ -39,7 +50,7 @@
 				});
 			}
 
-			// Die Zeichen-Funktion beim Laden der Seite aufrufen
+			// initialize stuff and load the HTML view
 			$(document).ready(function() {
 				$('#board').hide();
 				$('#board').css('height', ($(document).height() -  $('#menu').height() - 80) + 'px');
@@ -49,7 +60,7 @@
 			});
 </script>
 		<link type="text/css" rel="stylesheet" href="www/style.css" />
-		<style type="text/css">		/* das Style */
+		<style type="text/css">		/* the Style */
 </style>
 	</head>
 	<body>
