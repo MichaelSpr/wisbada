@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Stammbaum</title>
-		
-		<!--For local development: <base href="../" />-->
+<?php if (isset($_GET))echo "<!--"; ?> 
+		<base href="../" />
+<?php if (isset($_GET)) echo "--" . html_entity_decode ('&gt;'); ?>
 		<link rel="icon" href="www/img/favicon.ico" type="image/x-icon" />
 		
 		<script type="text/javascript" src="www/libs/jquery-1.6.1.min.js"></script>
