@@ -175,6 +175,26 @@ ul ul > .paar > div > .person.noconnection:before {
 	background-position: -1300px 0;
 }
 
+ul ul > .paar.first > div > .person.first:before {
+	background-position: -260px 0;
+}
+
+ul ul > .paar.last > div > .person.first:before {
+	background-position: -520px 0;
+}
+
+ul ul > .paar.last.first > div > .person.first:before {
+	background-position: -260px 0;
+}
+
+ul ul > .paar.last > div > .person.last.noconnection:before {
+	background-position: 0 0;
+}
+
+ul ul > .paar.last > div > .person.last:before {
+	background-position: -520px 0;
+}
+
 ul ul > .person.first:before {
 	background-position: -260px 0;
 }
