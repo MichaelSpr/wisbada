@@ -136,7 +136,7 @@ body {
 
 .person {
 	float: left;
-	width: 260px;
+	width: 150px;
 }
 
 .person > div {
@@ -154,7 +154,7 @@ body {
 }
 
 .paar .wrap{
-	width: 520px;
+	width: 300px;
 	margin: 0 auto;
 }
 		
@@ -168,23 +168,23 @@ body {
 }
 
 ul ul > .person:before, ul ul > .paar > div > .person:before {
-	background-position: -780px 0;
+	background-position: -450px 0;
 }
 
 ul ul > .paar > div > .person.noconnection:before {
-	background-position: -1300px 0;
+	background-position: -750px 0;
 }
 
 ul ul > .paar.first > div > .person.first:before {
-	background-position: -260px 0;
+	background-position: -150px 0;
 }
 
 ul ul > .paar.last > div > .person.first:before {
-	background-position: -520px 0;
+	background-position: -300px 0;
 }
 
 ul ul > .paar.last.first > div > .person.first:before {
-	background-position: -260px 0;
+	background-position: -150px 0;
 }
 
 ul ul > .paar.last > div > .person.last.noconnection:before {
@@ -192,25 +192,25 @@ ul ul > .paar.last > div > .person.last.noconnection:before {
 }
 
 ul ul > .paar.last > div > .person.last:before {
-	background-position: -520px 0;
+	background-position: -300px 0;
 }
 
 ul ul > .person.first:before {
-	background-position: -260px 0;
+	background-position: -150px 0;
 }
 
 ul ul > .person.last:before {
-	background-position: -520px 0;
+	background-position: -300px 0;
 }
 
 ul ul > .person.first.last:before {
-	background-position: -1040px 0;
+	background-position: -600px 0;
 }
 
 .paar.parent > div {
 	padding-bottom: 30px;
 	background: url(img/sprite-v1.png) top left no-repeat transparent;
-	background-position: -1560px bottom;
+	background-position: -900px bottom;
 }
 
 
