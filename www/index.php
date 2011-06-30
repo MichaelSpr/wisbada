@@ -55,9 +55,10 @@
 			$(document).ready(function() {
 				$('#board').hide();
 				$('#board').css('height', ($(document).height() -  $('#menu').height() - 80) + 'px');
-
-				loadHTMLView();
-
+				
+				STAMMBAUM.view.init(jQuery("#tmp > ul"));
+				
+				loadHTMLView();				
 			});
 </script>
 		<link type="text/css" rel="stylesheet" href="www/style.css" />
@@ -105,7 +106,7 @@
 		</div>
 		
 		<div id="tmp" style="display: none;">
-			<ul class="clearfix" style="width: 1040px; margin: 0 auto;">
+			<ul class="clearfix">
 				<li class="paar parent">
 					<div class="wrap clearfix">
 						<div class="person first root">
@@ -119,7 +120,7 @@
 							</div>
 						</div>
 					</div>
-					<ul class="clearfix" style="width: 1040px;">
+					<ul class="clearfix">
 						<li class="person first">
 							<div>
 								<h4>Bart Simpson</h4>
@@ -138,7 +139,7 @@
 									</div>
 								</div>
 							</div>
-							<ul class="clearfix" style="width: 260px;">
+							<ul class="clearfix">
 								<li class="person first last">
 									<div>
 										<h4><em>Lisas Kind</em></h4>

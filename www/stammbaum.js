@@ -3,6 +3,48 @@
  *
  */
 
+/**
+ * init namespace "Stammbaum"
+ */
+ 
+var STAMMBAUM = {};
+STAMMBAUM.view = {};
+
+/**
+ * init namespace "Stammbaum"
+ */
+STAMMBAUM.view.width = 150;
+STAMMBAUM.view.init = function(elem) {
+	STAMMBAUM.view.set_width(elem);
+}
+STAMMBAUM.view.set_width = function(elem) {
+	var width = 0;
+
+	var lis = elem.children("li");
+						
+	
+	for(var i=0; i<lis.length; i++) {
+		var li = jQuery(lis[i]); var li_width = 0; var ul_width = 0;
+
+		/* get width of nested lists (recursive) */
+		var uls = li.children("ul");
+		if(uls.length > 0) {
+			ul_width = STAMMBAUM.view.set_width( jQuery(uls[0]) );
+		}
+		
+		/* get width of li element */
+		li_width += STAMMBAUM.view.width;
+		if(  li.hasClass("paar") ) {
+			li_width += STAMMBAUM.view.width;
+		}
+		
+		width += Math.max(li_width, ul_width);
+	}
+	
+	elem.css("width", width + "px");
+	return width;
+}
+
 /** Die Klasse Person stellt einen Knoten im Stammbaum dar und
  * bietet Methoden an, um die Person zu bearbeiten.
  */
