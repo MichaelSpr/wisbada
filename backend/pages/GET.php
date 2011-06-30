@@ -56,6 +56,10 @@ if (true == isset($_SESSION['token'])) {
                 $xmlString.="<kind id=\"" . $row->bid . "\" elternteil=\"" . $row->id_1 . "\" kind=\"" . $row->id_2 . "\" />";
         }
         $xmlString.="</beziehungen>";
+		
+		if($_POST && isset($_POST["startat"]))
+			$xmlString.="<startat id=\"".$_POST["startat"]."\" />";
+			
         $xmlString.="</familie>";
 
         //DomDocument mit dem XML String initialisieren und gegen XSD prüfen!
