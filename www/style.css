@@ -132,6 +132,7 @@ body {
 /* LIST */
 #board ul {
 	 margin: 0 auto;
+	 position: relative;
 }
 
 .person {
@@ -213,6 +214,12 @@ ul ul > .person.first.last:before {
 	background-position: -900px bottom;
 }
 
+.line {
+	display: block;
+	height: 30px;
+	position: absolute;
+	background: url(img/hLine.png) top left repeat-x transparent;
+}
 
 /* Clearfix */
 .clearfix:after {
