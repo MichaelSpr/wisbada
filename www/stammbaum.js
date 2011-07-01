@@ -14,9 +14,10 @@ STAMMBAUM.view.init = function(elem) {
 	STAMMBAUM.view.set_width(main_ul);
 		
 	var scale = Math.round(elem.innerWidth()/(main_ul.width())*1000)/1000;
-	
-	main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
-	main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
+	if(scale < 1) { //no upscaling
+		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
+		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
+	}
 }
 STAMMBAUM.view.set_width = function(elem) {
 	var width = 0;
