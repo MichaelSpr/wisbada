@@ -1,45 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
+	<xsl:include href="commonHead.xsl"/> 
 	<xsl:output method="html" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
-	<xsl:template match="//familie">
-		<html>
-			<head>
-				<title>XSLT Test</title>
-				<link rel="stylesheet" type="text/css" href="style.css"/>
-				<script type="text/javascript" src="libs/jquery-1.6.1.min.js" ></script>
-				<script type="text/javascript" src="stammbaum.js" ></script>
-				<script type="text/javascript"><![CDATA[
-					jQuery(document).ready(function() {
-						STAMMBAUM.view.init(jQuery("#board"));
-					});
-					
-				]]></script>
-				<style type="text/css"><![CDATA[
-					.clearfix { display: block; }
-				]]></style>
-			</head>
-			<body>
-				<div id="wrap">
-					<div id="menu" class="mainmenu">
-						<ul class="clearfix">
-							<li class="logo">
-								<a>
-									<img src="img/logo.png" alt="wisbada - Dein Stammbaum im Internet" width="167" height="42"/>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div id="board">
-						<ul>
-							<xsl:variable name="startId" select="startid"/>
-							<xsl:apply-templates select="//partner[@partnerEins=$startId or @partnerZwei=$startId]"/>
-						</ul>
-					</div>
-				</div>
-			</body>
-		</html>
-	</xsl:template>
+	<xsl:variable name="startId" select="startid"/>
 	<xsl:template match="person">
 		<h4>
 			<strong style="color: red;"><xsl:attribute name="title">ID: <xsl:value-of select="./@id"/></xsl:attribute><xsl:value-of select="./@id"/>: </strong>

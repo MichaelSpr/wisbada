@@ -19,8 +19,8 @@ class Context {
         include("backend/config/config.php");
         $this->initClasses();
 
-        if (true == isset($_GET['page'])) {
-            include("backend/pages/" . $_GET["page"] . ".php");
+        if (true == isset($_REQUEST['page'])) {
+            include("backend/pages/" . $_REQUEST["page"] . ".php");
         } else {
             include("backend/pages/NEW.php");
         }

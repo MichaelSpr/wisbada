@@ -221,6 +221,34 @@ ul ul > .person.first.last:before {
 	background: url(img/hLine.png) top left repeat-x transparent;
 }
 
+/** The modal dialog */
+#dialog-overlay {
+	background-color: #000;
+}
+
+#dialog-container {
+	background: url(img/bg.jpg) top center no-repeat #66af24;
+	border: 1px solid black;
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;
+	padding: 8px;
+}
+#dialog-container  h1 {
+	font-size: 2em;
+}
+
+.simplemodal-close {
+	background:url(img/x.png) no-repeat; /* adjust url as required */
+	width:25px;
+	height:29px;
+	display:inline;
+	z-index:3200;
+	position:absolute;
+	top:-15px;
+	right:-18px;
+	cursor:pointer;
+	text-decoration: none;
+}
+
 /* Clearfix */
 .clearfix:after {
 	content: ".";

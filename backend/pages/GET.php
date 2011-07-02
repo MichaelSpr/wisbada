@@ -1,12 +1,15 @@
 <?php
 
 //Token vorhanden?
-if (true == isset($_SESSION['token'])) {
+if (true == isset($_REQUEST['token'])) {
     
     //Ja, TokenID zwischenspeichern
-    $tokenid = $_SESSION['token'];
-    
-    
+    $tokenid = $_REQUEST['token'];
+	$outputStyle = isset($_REQUEST['outputStyle'])?$_REQUEST['outputStyle']:'html';
+	if ($outputStyle != 'svg' && $outputStyle!= 'html' && $outputStyle='xml') {
+		$outputStyle = 'html'; // set a sane default
+    }
+     
     $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Aufruf mit der TokenID: " . $tokenid);
     $this->Data->connect();
 
@@ -14,11 +17,13 @@ if (true == isset($_SESSION['token'])) {
     $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE id = '" . $tokenid . "'");
     $row = mysql_fetch_object($a);
 
-    if (1 == $row->Anzahl) {
+    if (1 == $row->Anzahl || 0 == $row->Anzahl) {
 
         //XML Header erstellen
         $xmlString = "";
         $xmlString.= "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+		if ($outputStyle != 'xml')
+			$xmlString.= '<?xml-stylesheet href="www/' .  $outputStyle . '.xsl" type="text/xsl"?>';
         $xmlString.="<familie token=\"" . $tokenid . "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd\">";
         $xmlString.="<personen>";
 
@@ -57,8 +62,8 @@ if (true == isset($_SESSION['token'])) {
         }
         $xmlString.="</beziehungen>";
 		
-		if($_POST && isset($_POST["startat"]))
-			$xmlString.="<startat id=\"".$_POST["startat"]."\" />";
+		if($_REQUEST && isset($_REQUEST["startat"]))
+			$xmlString.="<startat id=\"".$_REQUEST["startat"]."\" />";
 			
         $xmlString.="</familie>";
 

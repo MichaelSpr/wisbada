@@ -35,23 +35,23 @@ function libxml_display_errors() {
 libxml_use_internal_errors(true);
 
 //TokenID vorhande?
-if (isset($_SESSION["token"])) {
+if (isset($_REQUEST["token"])) {
     //TokenID zwischenspeichern
-    $tokenid = $_SESSION["token"];
+    $tokenid = $_REQUEST["token"];
     $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Aufruf mit der TokenID: " . $tokenid);
     //Daten übermittelt?
-    if ($_POST && isset($_POST["xml"])) {
+    if ($_REQUEST && isset($_REQUEST["xml"])) {
         $dom = new DomDocument();
         /** @var DomDocument */
-        $dom->loadXML($_POST["xml"]);
+        $dom->loadXML($_REQUEST["xml"]);
 
         //Übergebene XML validieren
         if ($dom->schemaValidate($this->getConfigValue("XSDPath"))) {
-            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "XML erfolgreich validiert: " . htmlspecialchars($_POST["xml"], ENT_QUOTES));
+            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "XML erfolgreich validiert: " . htmlspecialchars($_REQUEST["xml"], ENT_QUOTES));
             $this->Data->connect();
 
             //Wurde als POST der Delete Flag gesetzt? Alle Einträge dieser Token werden gelöscht!
-            if (true == isset($_POST["delete"]) && $_POST["delete"] == 1)
+            if (true == isset($_REQUEST["delete"]) && $_REQUEST["delete"] == 1)
                 $delete = true;
             else
                 $delete = false;
@@ -59,7 +59,7 @@ if (isset($_SESSION["token"])) {
             //Stammbaum existiert?
             $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE id = '" . $tokenid . "'");
             $row = mysql_fetch_object($a);
-            if (1 == $row->Anzahl) {
+            if (1 == $row->Anzahl || 0 == $row->Anzahl) {
 
                 if ($delete == true) {
                     //Akke Beziehungen und Personen löschen!
