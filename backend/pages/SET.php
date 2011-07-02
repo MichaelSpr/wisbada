@@ -56,7 +56,7 @@ if (!empty($tokenid)) {
                 $delete = false;
             $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Delete Flag wurde auf " . print_r($delete) . " gesetzt");
             //Stammbaum existiert?
-            $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE name = '" . $tokenid . "'");
+            $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE id = '" . $tokenid . "'");
             $row = mysql_fetch_object($a);
             if (1 == $row->Anzahl) {
 

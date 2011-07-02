@@ -56,10 +56,18 @@ class Context {
 		returns the token or an empty string if the token wasn't set yet
 	*/
 	public function getToken() {
-		if (isset($_SESSION['hash']) || isset($_REQUEST['token'])) 
-			return isset($_SESSION['hash'])?$_SESSION['hash']:$_REQUEST['token'];
-		else
-			return '';
+		if (!isset($_SESSION["token"])){
+			if (false == $this->Data->isConnected())
+				$this->Data->connect();
+			$hash = isset($_SESSION['hash'])?$_SESSION['hash']:$_REQUEST['token'];
+			$a = $this->Data->execQuery('SELECT * FROM stammbaum WHERE name = "$hash" LIMIT 1;');
+			$row = mysql_fetch_object($a);
+			$_SESSION["token"] = $row->id;
+
+			return $row->id;
+		}else{
+			return $_SESSION["token"];
+		}
 	}
 
     /**

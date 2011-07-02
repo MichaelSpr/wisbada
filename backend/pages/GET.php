@@ -13,7 +13,7 @@ if (!empty($tokenid)){
     $this->Data->connect();
 
     //Ist ein Stammbaum mit diesem Token vorhanden?
-    $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE name = '" . $tokenid . "'");
+    $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE id = '" . $tokenid . "'");
     $row = mysql_fetch_object($a);
 	
 	//XML Header erstellen
