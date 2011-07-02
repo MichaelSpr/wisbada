@@ -56,10 +56,8 @@
 						</ul>
 					</div>
 					<div id="board">
-						<ul>
-							<xsl:variable name="startId" select="startid"/>
-							<xsl:apply-templates /> <!-- select="//partner[@partnerEins=$startId or @partnerZwei=$startId]"/> -->
-						</ul>
+						<xsl:variable name="startId" select="startid"/>
+						<xsl:call-template name="stammbaum" />
 					</div>
 				</div>
 			</body>

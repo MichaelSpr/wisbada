@@ -11,13 +11,14 @@ if (true == isset($_GET["token"])) {
 }
 
 if (0 == $count) {
+	// Neue session bzw. noch nicht in der DB
 	$_SESSION["hash"] = crc32(time());
     $this->Data->execQuery("INSERT INTO `stammbaum` (`name`) VALUES (\"" . $_SESSION["hash"] . "\");");
     $_SESSION["token"] = $this->Data->getLastInsertedId();
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim($_SERVER['PHP_SELF'], '/\\');
-	if ($this->getConfigValue("ModRewrite"))
-		header("Location: http://$host$uri?token=".$_SESSION["hash"]);
+	if ($this->getConfigValue("ModRewrite") && file_exists('../.htaccess') )
+		header("Location: http://$host".dirname($uri)."/".$_SESSION["hash"]);
 	else
 		header("Location: http://$host$uri?token=".$_SESSION["hash"]);
 		

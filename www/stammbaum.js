@@ -22,7 +22,7 @@ STAMMBAUM.view.init = function(elem) {
 	main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 	
-	STAMMBAUM.token = /token=(\d{3,8})/.exec(document.location)[1];
+	STAMMBAUM.token = /token=(\d{3,10})/.exec(document.location)[1];
 	
 	hookEvents();
 }

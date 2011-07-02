@@ -7,8 +7,8 @@
 		$outputStyle = 'html'; // set a sane default
     }
 	
-	if ($this->getConfigValue("ModRewrite"))
-		header("Location: http://$host$uri?page=GET&outputStyle=$outputStyle&token=" . $_SESSION["hash"] );
+	if ($this->getConfigValue("ModRewrite") && file_exists('../.htaccess') )
+		header("Location: http://$host".dirname($uri)."/". toUpper($outputStyle) ."/". $this->getToken() );
 	else
-		header("Location: http://$host$uri?page=GET&outputStyle=$outputStyle&token=" . $_SESSION["hash"] );
+		header("Location: http://$host$uri?page=GET&outputStyle=$outputStyle&token=" . $this->getToken() );
 ?>

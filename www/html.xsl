@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
-	<xsl:include href="commonHead.xsl"/> 
 	<xsl:output method="html" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
 	<xsl:variable name="startId" select="startid"/>
+	<xsl:include href="commonHead.xsl"/> 
+	<xsl:template name="stammbaum">
+		<ul>
+		<xsl:apply-templates /> <!-- select="//partner[@partnerEins=$startId or @partnerZwei=$startId]"/> -->
+		</ul>
+	</xsl:template>
+
 	<xsl:template match="person">
 		<h4>
 			<strong style="color: red;"><xsl:attribute name="title">ID: <xsl:value-of select="./@id"/></xsl:attribute><xsl:value-of select="./@id"/>: </strong>
@@ -15,7 +21,6 @@
 	</xsl:template>
 	
 	<xsl:template name="partner" match="partner">
-		
 		<xsl:param name="pkid">-1</xsl:param><!--Welcher der Partner ist blutsverwandt???-->
 		<xsl:param name="position">-1</xsl:param>
 		<xsl:param name="last">0</xsl:param>

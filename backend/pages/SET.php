@@ -35,9 +35,8 @@ function libxml_display_errors() {
 libxml_use_internal_errors(true);
 
 //TokenID vorhande?
-if (isset($_REQUEST["token"])) {
-    //TokenID zwischenspeichern
-    $tokenid = $_REQUEST["token"];
+$tokenid = $this->getToken();
+if (!empty($tokenid)) {
     $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Aufruf mit der TokenID: " . $tokenid);
     //Daten übermittelt?
     if ($_REQUEST && isset($_REQUEST["xml"])) {
@@ -55,11 +54,11 @@ if (isset($_REQUEST["token"])) {
                 $delete = true;
             else
                 $delete = false;
-            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Delete Flag wurde auf " . $delete . " gesetzt");
+            $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Delete Flag wurde auf " . print_r($delete) . " gesetzt");
             //Stammbaum existiert?
-            $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE id = '" . $tokenid . "'");
+            $a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM stammbaum WHERE name = '" . $tokenid . "'");
             $row = mysql_fetch_object($a);
-            if (1 == $row->Anzahl || 0 == $row->Anzahl) {
+            if (1 == $row->Anzahl) {
 
                 if ($delete == true) {
                     //Akke Beziehungen und Personen löschen!
@@ -155,8 +154,8 @@ if (isset($_REQUEST["token"])) {
                 echo 1;
             } else {
                 //0 mit Fehlermeldung zurückgeben
-                $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::WARNING, "Session abgelaufen ode Token nicht vorhanden!");
-                echo "0;Session abgelaufen ode Token nicht vorhanden!";
+                $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::WARNING, "Session abgelaufen oder Token nicht vorhanden!");
+                echo "0;Session abgelaufen oder Token nicht vorhanden!";
             }
         } else {
             //0 mit Fehlermeldung zurückgeben

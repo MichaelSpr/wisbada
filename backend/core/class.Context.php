@@ -51,6 +51,16 @@ class Context {
         unset($this->Log);
         unset($this->Data);
     }
+	
+	/**
+		returns the token or an empty string if the token wasn't set yet
+	*/
+	public function getToken() {
+		if (isset($_SESSION['hash']) || isset($_REQUEST['token'])) 
+			return isset($_SESSION['hash'])?$_SESSION['hash']:$_REQUEST['token'];
+		else
+			return '';
+	}
 
     /**
      * Gibt den Konfigurationswert des übergebenen Schlüssels zurück. Falls kein Schlüssel gefunden werden konnte wird stattdessen ein Leerstring zurückgegeben!
