@@ -57,7 +57,6 @@
 						</ul>
 					</div>
 					<div id="board">
-						<xsl:variable name="startId" select="startid"/>
 						<xsl:call-template name="stammbaum" />
 					</div>
 				</div>
