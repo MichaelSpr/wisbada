@@ -15,12 +15,20 @@
 			<xsl:with-param name="personID" select="./@id"/>
 		</xsl:call-template>
 		<h4>
-			<strong style="color: red;"><xsl:attribute name="title">ID: <xsl:value-of select="./@id"/></xsl:attribute><xsl:value-of select="./@id"/>: </strong>
 			<xsl:value-of select="./vorname"/>
 			<xsl:text><![CDATA[]]>
 			</xsl:text>
 			<xsl:value-of select="./name"/>
 		</h4>
+	</xsl:template>
+	
+	<xsl:template name="editor">
+		<xsl:param name="personID" />
+		<a href="javascript:onEditPerson({$personID});" class="action edit"><span>Bearbeiten</span></a>
+		<a href="javascript:onDeletePerson({$personID});" class="action del"><span>Löschen</span></a>
+		<a href="javascript:onAddPerson({$personID},'parent');" class="action addParent"><span>Elternteil hinzufügen</span></a>
+		<a href="javascript:onAddPerson({$personID},'partner');" class="action addPartner"><span>Partner hinzufügen</span></a>
+		<a href="javascript:onAddPerson({$personID},'child');" class="action addChild"><span>Kind hinzufügen</span></a>
 	</xsl:template>
 	
 	<xsl:template name="partner" match="partner">
@@ -46,6 +54,9 @@
 						person first
 						<xsl:if test="$pkid!=$p1id"> noconnection</xsl:if>
 					</xsl:attribute>
+					<xsl:attribute name="data-id">
+						<xsl:value-of select="$p1id" />
+					</xsl:attribute>
 					<div>
 						<xsl:apply-templates select="//person[@id=$p1id]"/>
 					</div>
@@ -54,6 +65,9 @@
 					<xsl:attribute name="class">
 						person last
 						<xsl:if test="$pkid!=$p2id"> noconnection</xsl:if>
+					</xsl:attribute>
+					<xsl:attribute name="data-id">
+						<xsl:value-of select="$p2id" />
 					</xsl:attribute>
 					<div>
 						<xsl:apply-templates select="//person[@id=$p2id]"/>
@@ -98,6 +112,9 @@
 								<xsl:if test="$position=1"> first</xsl:if>
 								<xsl:if test="$position=$last"> last</xsl:if>
 							</xsl:attribute>
+							<xsl:attribute name="data-id">
+								<xsl:value-of select="$pkid" />
+							</xsl:attribute>
 							<div>
 								<xsl:apply-templates select="//person[@id=$pkid]"/>
 							</div>
@@ -110,12 +127,4 @@
 
 	</xsl:template>
 	
-	<xsl:template match="kind">
-		<li class="person first">
-			<div>
-				<xsl:variable name="p1id" select="@kind"/>
-				<xsl:apply-templates select="//person[@id=$p1id]"/>
-			</div>
-		</li>
-	</xsl:template>
 </xsl:stylesheet>

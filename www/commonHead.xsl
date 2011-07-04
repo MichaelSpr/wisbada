@@ -6,7 +6,7 @@
 		<html>
 			<head>
 				<title>Stammbaum</title>
-				<base href="www/" />
+				<!--<base href="http://dh.ramon-roessler.de/ProjektStammbaum/9_AktuelleVersionAusDemGit/www/" />-->
 				<meta charset="utf-8" />
 				<link rel="icon" href="img/favicon.ico" type="image/x-icon" />
 				<link rel="stylesheet" type="text/css" href="style.css"/>
@@ -20,9 +20,6 @@
 					});
 				]]>
 				</script>
-				<style type="text/css"><![CDATA[
-					.clearfix { display: block; }
-				]]></style>
 			</head>
 			<body>
 				<div id="wrap">
@@ -62,17 +59,6 @@
 				</div>
 			</body>
 		</html>
-	</xsl:template>
-	
-	<xsl:template name="editor">
-		<xsl:param name="personID" />
-		<div class="activity">
-			<a href="javascript:onEditPerson({$personID});" data="edit"><img alt="edit" src="img/edit.png"/></a>
-			<a href="javascript:onDeletePerson({$personID});" data="del"><img alt="delete" src="img/trashcan_empty.png"/></a>
-			<a href="javascript:onAddPerson({$personID},'parent');" data="addParent"><img alt="addParent" src="img/add.png"/></a>
-			<a href="javascript:onAddPerson({$personID},'partner');" data="addPartner"><img alt="addPartner" src="img/add.png"/></a>
-			<a href="javascript:onAddPerson({$personID},'child');" data="addChild"><img alt="addChild" src="img/add.png"/></a>
-		</div>
 	</xsl:template>
 
 </xsl:stylesheet>

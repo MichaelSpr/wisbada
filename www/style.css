@@ -223,18 +223,53 @@ ul ul > .person.first.last:before {
 
 /** Person activities */
 .person  > div { position: relative; }
-.person  > div .activity {
-	display: none;
+.person  a.action {
 	position: absolute;
-	top:-32px;
-	margin: 10px;
-	z-index: 1000;
+	display: none;
+	overflow: hidden;
 }
-.person > div:hover  .activity  a[data="edit"]{
-	left: -100px;
-}
-.person > div:hover  .activity{
+.person:hover a.action {
 	display: block;
+}
+
+.person  a.action span {
+	display: block;
+	width: 32px;
+	height: 32px;
+	text-indent: -1000em;
+	background: url(img/icons.png) top left no-repeat transparent;
+}
+
+.person  a.addParent span, .person  a.addPartner span, .person  a.addChild span {
+	background-position: -32px 0;
+}
+
+.person  a.edit span {
+	background-position: -64px 0;
+}
+
+.person  a.del span {
+	background-position: -96px 0;
+}
+
+.person  a.addParent {
+	left: 52px; top: -16px;
+}
+
+.person  a.addPartner {
+	right: -16px; top: 8px;
+}
+
+.person  a.addChild {
+	left: 52px; bottom: -16px;
+}
+
+.person  a.edit {
+	left: -16px; bottom: -16px;
+}
+
+.person  a.del {
+	left: -16px; bottom: 16px;
 }
 
 /** The modal dialog */
@@ -273,14 +308,6 @@ ul ul > .person.first.last:before {
 	visibility: hidden;
 	line-height: 0;
 	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
 }
  
 * html .clearfix {
