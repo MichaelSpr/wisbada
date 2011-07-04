@@ -16,8 +16,7 @@ STAMMBAUM.view.init = function(elem) {
 	STAMMBAUM.view.set_width(main_ul);
 	STAMMBAUM.view.fillLines(main_ul);
 
-	var scale = STAMMBAUM.helper.round(elem.innerWidth()/(main_ul.width()), 3);
-
+	var scale = STAMMBAUM.helper.round(elem.width()/(main_ul.width()), 3);
 	if(scale < 1) { //no upscaling
 		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
