@@ -17,7 +17,7 @@ if (0 == $count) {
     $this->Data->execQuery("INSERT INTO `stammbaum` (`name`) VALUES (\"" . $_SESSION["hash"] . "\");");
     $_SESSION["token"] = $this->Data->getLastInsertedId();
 	
-	$this->Data->execQuery("INSERT INTO personen VALUES (".$_SESSION["token"].",1,'Mustermann','Max','Musterstart','1900-01-01','','1900-01-01',0,'','');");
+	$this->Data->execQuery("INSERT INTO personen VALUES (".$_SESSION["token"].",1,'Mustermann','Max','Musterstadt','1900-01-01','','1900-01-01',0,'','');");
 	
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim($_SERVER['PHP_SELF'], '/\\');
