@@ -28,10 +28,10 @@ if (!empty($tokenid)){
 	
 		$xmlString.="<personen>";
 		
-		if(isset($_REQUEST['pID']) && $_REQUEST['pID'] != ""){
+		if(isset($_REQUEST['pid']) && $_REQUEST['pid'] != ""){
 			//Für jede Person XML Tag erstellen
-			$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Suche nach Person mit der ID: " . $_REQUEST['pID']);
-			$a = $this->Data->execQuery("SELECT * FROM personen WHERE tid = '" . $tokenid . "' AND pid='".$_REQUEST['pID']."' LIMIT 1");
+			$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Suche nach Person mit der ID: " . $_REQUEST['pid']);
+			$a = $this->Data->execQuery("SELECT * FROM personen WHERE tid = '" . $tokenid . "' AND pid='".$_REQUEST['pid']."' LIMIT 1");
 			while ($row = mysql_fetch_object($a)) {
 				$xmlString.="<person id=\"" . $row->pid . "\">";
 				$xmlString.="<name>" . $row->name . "</name>";
