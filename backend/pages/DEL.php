@@ -42,17 +42,18 @@ if (!empty($tokenid)) {
     if ($_REQUEST && (isset($_REQUEST["pid"]) || isset($_REQUEST["bid"]))) {
 		$this->Data->connect();
 	
+		if(isset($_REQUEST["bid"]) && $_REQUEST["bid"] != ""){
+			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND bid = '". $_REQUEST["bid"] . "';");	
+			echo "1;Beziehung gelöscht<br/>";
+		}      
 		if(isset($_REQUEST["pid"]) && $_REQUEST["pid"] != ""){
 			$this->Data->execQuery("DELETE FROM personen WHERE tid = '" . $tokenid . "' AND pid = '".$_REQUEST["pid"]."';");
 			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_1 = '".$_REQUEST["pid"]."';");
 			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_2 = '".$_REQUEST["pid"]."';");
-			echo "Person und Beziehungen gelöscht<br/>";
+			echo "1;Person und Beziehungen gelöscht<br/>";
 		}
 		
-		if(isset($_REQUEST["bid"]) && $_REQUEST["bid"] != ""){
-			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND bid = '". $_REQUEST["bid"] . "';");	
-			echo "Beziehung gelöscht<br/>";
-		}        
+		  
     } else {
         //0 mit Fehlermeldung zurückgeben
         $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::WARNING, "Aufruf ohne GET!");
