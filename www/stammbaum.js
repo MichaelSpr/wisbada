@@ -138,7 +138,7 @@ STAMMBAUM.view.dialog = function(data, options) {
 					var tmp = jQuery("<a class=\"btn\">" + btn.title + "</a>");
 					
 					if(btn.primary) tmp.addClass("primary");
-					tmp.click( function() { if(btn.close) { jQuery.modal.close(); } if(btn.callback != null) { btn.callback(dialog); } return false; } );
+					tmp.click( (function(btn) { return function() { if(btn.close) { jQuery.modal.close(); } if(btn.callback != null) { btn.callback(dialog); } return false; } } )(btn) );
 
 					btns.append(tmp);
 				}
