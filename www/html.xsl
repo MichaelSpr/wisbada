@@ -6,7 +6,24 @@
 	<xsl:include href="commonHead.xsl"/> 
 	<xsl:template name="stammbaum">
 		<ul>
-		<xsl:apply-templates select="//partner[@partnerEins=$startId or @partnerZwei=$startId]" />
+			<xsl:choose>
+				<xsl:when test="//partner[@partnerEins=$startId or @partnerZwei=$startId]">
+					<xsl:apply-templates select="//partner[@partnerEins=$startId or @partnerZwei=$startId]" />
+				</xsl:when>
+				<xsl:otherwise>
+					<li>
+						<xsl:attribute name="class">
+							person first last
+						</xsl:attribute>
+						<xsl:attribute name="data-id">
+							<xsl:value-of select="$startId" />
+						</xsl:attribute>
+						<div>
+							<xsl:apply-templates select="//person[@id=$startId]"/>
+						</div>
+					</li>
+				</xsl:otherwise>
+			</xsl:choose>
 		</ul>
 	</xsl:template>
 
