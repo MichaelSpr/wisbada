@@ -11,6 +11,9 @@
 	</xsl:template>
 
 	<xsl:template match="person">
+		<xsl:call-template name="editor" >
+			<xsl:with-param name="personID" select="./@id"/>
+		</xsl:call-template>
 		<h4>
 			<strong style="color: red;"><xsl:attribute name="title">ID: <xsl:value-of select="./@id"/></xsl:attribute><xsl:value-of select="./@id"/>: </strong>
 			<xsl:value-of select="./vorname"/>

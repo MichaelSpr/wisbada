@@ -63,5 +63,16 @@
 			</body>
 		</html>
 	</xsl:template>
+	
+	<xsl:template name="editor">
+		<xsl:param name="personID" />
+		<div class="activity">
+			<a href="javascript:onEditPerson({$personID});" data="edit"><img alt="edit" src="img/edit.png"/></a>
+			<a href="javascript:onDeletePerson({$personID});" data="del"><img alt="delete" src="img/trashcan_empty.png"/></a>
+			<a href="javascript:onAddPerson({$personID},'parent');" data="addParent"><img alt="addParent" src="img/add.png"/></a>
+			<a href="javascript:onAddPerson({$personID},'partner');" data="addPartner"><img alt="addPartner" src="img/add.png"/></a>
+			<a href="javascript:onAddPerson({$personID},'child');" data="addChild"><img alt="addChild" src="img/add.png"/></a>
+		</div>
+	</xsl:template>
 
 </xsl:stylesheet>

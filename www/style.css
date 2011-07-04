@@ -221,6 +221,22 @@ ul ul > .person.first.last:before {
 	background: url(img/hLine.png) top left repeat-x transparent;
 }
 
+/** Person activities */
+.person  > div { position: relative; }
+.person  > div .activity {
+	display: none;
+	position: absolute;
+	top:-32px;
+	margin: 10px;
+	z-index: 1000;
+}
+.person > div:hover  .activity  a[data="edit"]{
+	left: -100px;
+}
+.person > div:hover  .activity{
+	display: block;
+}
+
 /** The modal dialog */
 #dialog-overlay {
 	background-color: #000;

@@ -242,6 +242,13 @@ function onLinkShare() {
 	$.modal("<h1>Share this!</h1><p>bla fasel</p>");
 }
 
+function onDeletePerson(personId) {
+	console.log( 'Delete Person ID' + personId);
+}
+function onAddPerson(personId, where) {
+	console.log( 'Add Person ID' + personId + ' ' + where );
+}
+
 
 // hook the events
 function hookEvents() {
@@ -252,8 +259,4 @@ function hookEvents() {
 	$('#lnkimport').click( onLinkImport );
 	$('#lnkperma').click( onLinkPerma );
 	$('#lnkshare').click( onLinkShare );
-	
-	$('.person').click( function(e) {
-		onEditPerson(e.currentTarget);
-	});
 }
