@@ -225,7 +225,7 @@ function onLinkImport() {
 		'    </beziehungen>' + 
 		'</familie>';
 		
-	STAMMBAUM.view.dialog('<textarea cols="60" rows="8">'+ xmlData +'</textarea>',
+	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xmlData +'</textarea>',
 						{'title': "Import",
 						 'buttons': [
 							{'title': 'Importieren',
