@@ -6,7 +6,7 @@
 		<html>
 			<head>
 				<title>Stammbaum</title>
-				<!--<base href="http://dh.ramon-roessler.de/ProjektStammbaum/9_AktuelleVersionAusDemGit/www/" />-->
+				<base href="http://dh.ramon-roessler.de/ProjektStammbaum/9_AktuelleVersionAusDemGit/www/" />
 				<meta charset="utf-8" />
 				<link rel="icon" href="img/favicon.ico" type="image/x-icon" />
 				<link rel="stylesheet" type="text/css" href="style.css"/>
