@@ -5,6 +5,7 @@
 var STAMMBAUM = {};
 STAMMBAUM.view = {};
 STAMMBAUM.helper = {};
+STAMMBAUM.params = {};
 
 /**
 *
@@ -22,7 +23,7 @@ STAMMBAUM.view.init = function(elem) {
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 	
-	STAMMBAUM.token = /token=(\d{1,10})/.exec(document.location)[1];
+	STAMMBAUM.params.token = /token=(\d{1,10})/.exec(document.location)[1];
 	
 	hookEvents();
 }
@@ -104,8 +105,12 @@ STAMMBAUM.helper.round = function(number, precision) {
 }
 
 // Todo: Give the dialog the correct size
-STAMMBAUM.dialog = function(inData, callback) {
-	var dlg = $(inData).modal({
+STAMMBAUM.view.dialog = function(data, options) {
+	var opts = jQuery.extend({ 'title': '', 'buttons' : [] }, options);
+	var cnt = jQuery("<div></div>").prepend(data);
+	if(opts.title != '') cnt.prepend("<h3>" + opts.title + "</h3>");
+	
+	var dialog = cnt.modal({
 		closeHTML: "<a href='#' title='Close'></a>",
 		overlayId: 'dialog-overlay',
 		containerId: 'dialog-container',
@@ -118,22 +123,30 @@ STAMMBAUM.dialog = function(inData, callback) {
 				dialog.container.height( dialog.data.height() );
 			});
 		},
-		onShow: function(dialog) {
-			$('#dialog-container input').click( function() {
-				$.modal.close(); // must call this!
-				if (callback != null) callback( dialog.data );
-				return false;
-			});
-		},
 		onClose: function (dialog) {
 			dialog.container.fadeOut('slow', function () {
 				dialog.overlay.fadeOut('slow', function () {
 					$.modal.close(); // must call this!
-					
 				});
 			});
+		},
+		onShow: function(dialog) {
+			if(opts.buttons.length > 0) {
+				var btns = jQuery("<div class=\"buttons\"></div>");
+				for(var i=0; i<opts.buttons.length; i++) {
+					var btn = jQuery.extend({ 'title': '', 'primary': false, 'close': true, 'callback': null }, opts.buttons[i]);
+					var tmp = jQuery("<a class=\"btn\">" + btn.title + "</a>");
+					
+					if(btn.primary) tmp.addClass("primary");
+					tmp.click( function() { if(btn.close) { jQuery.modal.close(); } if(btn.callback != null) { btn.callback(dialog); } return false; } );
+
+					btns.append(tmp);
+				}
+				cnt.append(btns);
+			}
 		}
 	});
+	
 	
 }
 
@@ -154,12 +167,11 @@ function onLinkHTML() {
 
 function onLinkExport() {
 	$.post("../index.php", 
-		{ page: "GET", token: STAMMBAUM.token, outputStyle: 'xml' },
+		{ page: "GET", token: STAMMBAUM.params.token, outputStyle: 'xml' },
 		function(result) {
 			var serializer = new XMLSerializer();
 			var xml = serializer.serializeToString(result.documentElement);
-			STAMMBAUM.dialog('<div><h1>EXPORT</h1><textarea cols="60" rows="8">'+ xml +'</textarea>' +
-			'<br /></div>' );
+			STAMMBAUM.view.dialog('<textarea cols="60" rows="8">'+ xml +'</textarea>', { 'title': 'Export' } );
 				
 		}
 	);
@@ -213,25 +225,31 @@ function onLinkImport() {
 		'    </beziehungen>' + 
 		'</familie>';
 		
-	STAMMBAUM.dialog('<div><h1>Import</h1><textarea cols="60" rows="8">'+ xmlData +'</textarea>' +
-		'<br /><input type="submit" value="import"/> </div>',
-		function(data) {
-			$.post("../index.php", 
-				{ page: "SET", token: STAMMBAUM.token, xml: data.children('textarea').val() },
-				function(result) {
-					if (result == 1)
-					{
-						console.log('IMPORT: success');
-						location.reload();
-					}
-					else
-					{
-						console.log('IMPORT: failed\n' + result);
-						STAMMBAUM.dialog( '<div><h1>Import failed!</h1><p>'+result+'</p></div>');
-					}
-				}
-			);
-		});
+	STAMMBAUM.view.dialog('<textarea cols="60" rows="8">'+ xmlData +'</textarea>',
+						{'title': "Import",
+						 'buttons': [
+							{'title': 'Importieren',
+							 'primary': true,
+							 'callback': function(dialog) {
+								$.post("../index.php", 
+									{ page: "SET", token: STAMMBAUM.params.token, xml: dialog.data.find('textarea').val() },
+									function(result) {
+										if (result == 1)
+										{
+											console.log('IMPORT: success');
+											location.reload();
+										}
+										else
+										{
+											console.log('IMPORT: failed\n' + result);
+											STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Importvorgang!'});
+										}
+									}
+								);
+
+							 }
+							}]
+						});
 }
 
 function onLinkPerma() {
@@ -239,7 +257,7 @@ function onLinkPerma() {
 }
 
 function onLinkShare() {
-	$.modal("<h1>Share this!</h1><p>bla fasel</p>");
+	STAMMBAUM.view.dialog('<p>bla fasel</p>', {'title': 'Verteilen' });
 }
 
 function onDeletePerson(personId) {
