@@ -28,49 +28,76 @@ if (!empty($tokenid)){
 	
 		$xmlString.="<personen>";
 		
-        //Für jede Person XML Tag erstellen
-        $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Durchlaufe die Personen. Anzahl: " . mysql_num_rows($a));
-        $a = $this->Data->execQuery("SELECT * FROM personen WHERE tid = '" . $tokenid . "' ORDER BY pid");
-        while ($row = mysql_fetch_object($a)) {
-            $xmlString.="<person id=\"" . $row->pid . "\">";
-            $xmlString.="<name>" . $row->name . "</name>";
-            $xmlString.="<vorname>" . $row->vorname . "</vorname>";
-            $xmlString.="<geburtsort>" . $row->geburtsort . "</geburtsort>";
-            $xmlString.="<geburtsdatum>" . $row->geburtsdatum . "</geburtsdatum>";
-            $xmlString.="<sterbeort>" . $row->sterbeort . "</sterbeort>";
-            $xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
-            if (1 == $row->geschlecht)
-                $xmlString.="<geschlecht>w</geschlecht>";
-            else
-                $xmlString.="<geschlecht>m</geschlecht>";
-            $xmlString.="<bild>" . $row->bild . "</bild>";
-            $xmlString.="<sonstiges>" . $row->sonstiges . "</sonstiges>";
-            $xmlString.="</person>";
-        }
+		if(isset($_REQUEST['pID']) && $_REQUEST['pID'] != ""){
+			//Für jede Person XML Tag erstellen
+			$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Suche nach Person mit der ID: " . $_REQUEST['pID']);
+			$a = $this->Data->execQuery("SELECT * FROM personen WHERE tid = '" . $tokenid . "' AND pid='".$_REQUEST['pID']."' LIMIT 1");
+			while ($row = mysql_fetch_object($a)) {
+				$xmlString.="<person id=\"" . $row->pid . "\">";
+				$xmlString.="<name>" . $row->name . "</name>";
+				$xmlString.="<vorname>" . $row->vorname . "</vorname>";
+				$xmlString.="<geburtsort>" . $row->geburtsort . "</geburtsort>";
+				$xmlString.="<geburtsdatum>" . $row->geburtsdatum . "</geburtsdatum>";
+				$xmlString.="<sterbeort>" . $row->sterbeort . "</sterbeort>";
+				$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				if (1 == $row->geschlecht)
+					$xmlString.="<geschlecht>w</geschlecht>";
+				else
+					$xmlString.="<geschlecht>m</geschlecht>";
+				$xmlString.="<bild>" . $row->bild . "</bild>";
+				$xmlString.="<sonstiges>" . $row->sonstiges . "</sonstiges>";
+				$xmlString.="</person>";
+			}
 
-        $xmlString.="</personen>";
-        $xmlString.="<beziehungen>";
-
-        //Für jede Beziehung XML Tag erstellen!
-        $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Durchlaufe die Beziehungen. Anzahl: " . mysql_num_rows($a));
-        $a = $this->Data->execQuery("SELECT * FROM beziehungen WHERE tid = '" . $tokenid . "' ORDER BY type, bid");
-        
-        while ($row = mysql_fetch_object($a)) {
-            if (1 == $row->type)
-                $xmlString.="<partner id=\"" . $row->bid . "\" partnerEins=\"" . $row->id_1 . "\" partnerZwei=\"" . $row->id_2 . "\" />";
-            else
-                $xmlString.="<kind id=\"" . $row->bid . "\" elternteil=\"" . $row->id_1 . "\" kind=\"" . $row->id_2 . "\" />";
-        }
-        $xmlString.="</beziehungen>";
+			$xmlString.="</personen>";
+			$xmlString.="<beziehungen>";
+			$xmlString.="</beziehungen>";
 		
-		if($_REQUEST && isset($_REQUEST["startat"]))
-			$xmlString.="<startat id=\"".$_REQUEST["startat"]."\" />";
+			$xmlString.="</familie>";
+		}else{
+			//Für jede Person XML Tag erstellen
+			$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Durchlaufe die Personen. Anzahl: " . mysql_num_rows($a));
+			$a = $this->Data->execQuery("SELECT * FROM personen WHERE tid = '" . $tokenid . "' ORDER BY pid");
+			while ($row = mysql_fetch_object($a)) {
+				$xmlString.="<person id=\"" . $row->pid . "\">";
+				$xmlString.="<name>" . $row->name . "</name>";
+				$xmlString.="<vorname>" . $row->vorname . "</vorname>";
+				$xmlString.="<geburtsort>" . $row->geburtsort . "</geburtsort>";
+				$xmlString.="<geburtsdatum>" . $row->geburtsdatum . "</geburtsdatum>";
+				$xmlString.="<sterbeort>" . $row->sterbeort . "</sterbeort>";
+				$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				if (1 == $row->geschlecht)
+					$xmlString.="<geschlecht>w</geschlecht>";
+				else
+					$xmlString.="<geschlecht>m</geschlecht>";
+				$xmlString.="<bild>" . $row->bild . "</bild>";
+				$xmlString.="<sonstiges>" . $row->sonstiges . "</sonstiges>";
+				$xmlString.="</person>";
+			}
+
+			$xmlString.="</personen>";
+			$xmlString.="<beziehungen>";
+
+			//Für jede Beziehung XML Tag erstellen!
+			$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "Durchlaufe die Beziehungen. Anzahl: " . mysql_num_rows($a));
+			$a = $this->Data->execQuery("SELECT * FROM beziehungen WHERE tid = '" . $tokenid . "' ORDER BY type, bid");
 			
-        $xmlString.="</familie>";
+			while ($row = mysql_fetch_object($a)) {
+				if (1 == $row->type)
+					$xmlString.="<partner id=\"" . $row->bid . "\" partnerEins=\"" . $row->id_1 . "\" partnerZwei=\"" . $row->id_2 . "\" />";
+				else
+					$xmlString.="<kind id=\"" . $row->bid . "\" elternteil=\"" . $row->id_1 . "\" kind=\"" . $row->id_2 . "\" />";
+			}
+			$xmlString.="</beziehungen>";
+			
+			if($_REQUEST && isset($_REQUEST["startat"]))
+				$xmlString.="<startat id=\"".$_REQUEST["startat"]."\" />";
+				
+			$xmlString.="</familie>";
+		}
 	}
 	else	// simple empty xml
-	$xmlString.="<personen></personen><beziehungen></beziehungen></familie>";
-
+		$xmlString.="<personen></personen><beziehungen></beziehungen></familie>";
 
 	//DomDocument mit dem XML String initialisieren und gegen XSD prüfen!
 	$this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::NOTIFY, "XML Dokument generiert. Validiere gegen XSD!");
