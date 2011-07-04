@@ -171,7 +171,7 @@ function onLinkExport() {
 		function(result) {
 			var serializer = new XMLSerializer();
 			var xml = serializer.serializeToString(result.documentElement);
-			STAMMBAUM.view.dialog('<textarea cols="60" rows="8">'+ xml +'</textarea>', { 'title': 'Export' } );
+			STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xml +'</textarea>', { 'title': 'Export', 'buttons': [{'title': 'Abbrechen'}] } );
 				
 		}
 	);
@@ -228,6 +228,7 @@ function onLinkImport() {
 	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xmlData +'</textarea>',
 						{'title': "Import",
 						 'buttons': [
+							{'title': 'Abbrechen'},
 							{'title': 'Importieren',
 							 'primary': true,
 							 'callback': function(dialog) {
