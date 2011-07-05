@@ -354,6 +354,36 @@ input.permalink {
 	margin: 5px 0;
 }
 
+ul.share li {
+	display: block;
+	margin: 0 5px 0 0;
+	float: left;
+}
+
+ul.share a {
+	overflow: hidden;
+}
+
+ul.share span {
+	display: block;
+	width: 32px;
+	height: 32px;
+	text-indent: -1000em;
+	background: url(img/socialmedia.png) top left no-repeat transparent;
+}
+
+ul.share .facebook span {
+	background-position: -32px 0;
+}
+ul.share .twitter span {
+	background-position: -64px 0;
+}
+ul.share .xing span {
+	background-position: -96px 0;
+}
+ul.share .vz span {
+	background-position: -128px 0;
+}
 /* Clearfix */
 .clearfix:after {
 	content: ".";

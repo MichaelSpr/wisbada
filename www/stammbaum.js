@@ -7,6 +7,7 @@ STAMMBAUM.view = {};
 STAMMBAUM.helper = {};
 STAMMBAUM.params = {};
 STAMMBAUM.events = {};
+STAMMBAUM.config = {};
 
 /**
 *
@@ -103,6 +104,16 @@ STAMMBAUM.helper.getPersonCoordinates = function(elem) {
 STAMMBAUM.helper.round = function(number, precision) {
 	var verschiebung = Math.pow(10, precision);
 	return Math.round(number*verschiebung)/verschiebung;
+}
+
+/**
+* Configuration
+*/
+STAMMBAUM.config.socialmedia = {
+	'facebook': { 'name': 'Facebook', 'share': { 'url': 'http://www.facebook.com/sharer.php?u=%URL%', 'popup': true, 'width': 600, 'height': 250 } },
+	'twitter': { 'name': 'Twitter', 'share': { 'url': 'http://www.twitter.com/share?url=%URL%', 'popup': true, 'width': 600, 'height': 250 } },
+	'xing': { 'name': 'Xing', 'share': { 'url': 'https://www.xing.com/app/user?op=share;url=%URL%', 'popup': false } },
+	'vz': { 'name': 'VZ Netzwerke', 'share': { 'url': 'http://platform-redirect.vz-modules.net/r/Link/Share/?url=%URL%', 'popup': true, 'width': 600, 'height': 400 } }
 }
 
 // Todo: Give the dialog the correct size
@@ -259,7 +270,23 @@ STAMMBAUM.events.onLinkImport = function() {
 }
 
 STAMMBAUM.events.onLinkShare = function() {
-	STAMMBAUM.view.dialog('<h4>Permalink</h4><p>Um diese Seite Ihren Freunden und Verwandten zu zeigen, nutzen Sie bitte diese URL:</p><input type="text" name="permalink" class="permalink" value="' + STAMMBAUM.params.shorturl + '" /><h4>Teile diesen Stammbaum auf...</h4><ul class="share"><li><a href="http://www.facebook.com/sharer.php?u=' + escape(STAMMBAUM.params.shorturl) + '">Facebook</a></li><li><a href="http://www.twitter.com/share?url=' + escape(STAMMBAUM.params.shorturl) + '">Twitter</a></li></li>studiVZ/meinVZ</li></ul>', {'title': 'Verteilen' });
+	var shareDialog = '<h4>Permalink</h4>';
+	shareDialog += '<p>Um diese Seite Ihren Freunden und Verwandten zu zeigen, nutzen Sie bitte diese URL:</p><input type="text" name="permalink" class="permalink" value="' + STAMMBAUM.params.shorturl + '" />';
+	shareDialog += '<h4>Teile diesen Stammbaum auf...</h4><ul class="share clearfix"></ul>';
+	shareDialog = jQuery('<div>' + shareDialog + '</div>');
+	
+	var $ul = shareDialog.children("ul");
+	
+	for(var nname in STAMMBAUM.config.socialmedia) {
+		var network = STAMMBAUM.config.socialmedia[nname];
+		var $li = jQuery('<li><a href="' + network.share.url.replace('%URL%', escape(STAMMBAUM.params.shorturl)) + '" target="_blank" title="' + network.name + '" class="' + nname + '"><span>' + network.name + '</span></a></li>');
+		if(network.share.popup) {
+			$li.children("a").click( (function(network) { return function() { window.open( jQuery(this).attr('href'), '', 'width=' + network.share.width + ',height=' + network.share.height ); return false; } })(network) );
+		}
+		$ul.append($li);
+	}
+	
+	STAMMBAUM.view.dialog(shareDialog, {'title': 'Verteilen' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
