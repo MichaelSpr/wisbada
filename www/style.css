@@ -339,6 +339,21 @@ ul ul > .person.first.last:before {
 	text-decoration: none;
 }
 
+/**
+ * Dialoge
+ */
+#dialog-container h4 {
+	font-weight: bold;
+	margin: 10px 0 4px 0;
+}
+
+/* Share */
+input.permalink {
+	width: 100%;
+	border: 1px solid #222;
+	margin: 5px 0;
+}
+
 /* Clearfix */
 .clearfix:after {
 	content: ".";

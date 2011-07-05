@@ -24,6 +24,7 @@ STAMMBAUM.view.init = function(elem) {
 	}
 	
 	STAMMBAUM.params.token = /token=(\d{1,10})/.exec(document.location)[1];
+	STAMMBAUM.params.shorturl = "http://www.google.de/?q=" + STAMMBAUM.params.token;
 	
 	STAMMBAUM.events.hookEvents();
 }
@@ -106,7 +107,7 @@ STAMMBAUM.helper.round = function(number, precision) {
 
 // Todo: Give the dialog the correct size
 STAMMBAUM.view.dialog = function(data, options) {
-	var opts = jQuery.extend({ 'title': '', 'buttons' : [] }, options);
+	var opts = jQuery.extend({ 'title': '', 'buttons' : [], 'onShow': null }, options);
 	var cnt = jQuery("<div></div>").prepend(data);
 	if(opts.title != '') cnt.prepend("<h3>" + opts.title + "</h3>");
 	
@@ -143,6 +144,9 @@ STAMMBAUM.view.dialog = function(data, options) {
 					btns.append(tmp);
 				}
 				cnt.append(btns);
+			}
+			if(opts.onShow != null) {
+				opts.onShow(dialog);
 			}
 		}
 	});
@@ -253,12 +257,8 @@ STAMMBAUM.events.onLinkImport = function() {
 						});
 }
 
-STAMMBAUM.events.onLinkPerma = function() {
-	console.log('onLinkPerma');
-}
-
 STAMMBAUM.events.onLinkShare = function() {
-	STAMMBAUM.view.dialog('<p>bla fasel</p>', {'title': 'Verteilen' });
+	STAMMBAUM.view.dialog('<h4>Permalink</h4><p>Um diese Seite Ihren Freunden und Verwandten zu zeigen, nutzen Sie bitte diese URL:</p><input type="text" name="permalink" class="permalink" value="' + STAMMBAUM.params.shorturl + '" /><h4>Teile diesen Stammbaum auf...</h4><ul class="share"><li><a href="http://www.facebook.com/sharer.php?u=' + escape(STAMMBAUM.params.shorturl) + '">Facebook</a></li><li><a href="http://www.twitter.com/share?url=' + escape(STAMMBAUM.params.shorturl) + '">Twitter</a></li></li>studiVZ/meinVZ</li></ul>', {'title': 'Verteilen' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
@@ -276,8 +276,7 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
-	$('#lnkperma').click( STAMMBAUM.events.onLinkPerma );
-	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
 	
 	jQuery('.action.edit').click( function() { STAMMBAUM.events.onEditPerson(jQuery(this).attr('data-id')); } );
 	jQuery('.action.del').click( function() { STAMMBAUM.events.onDeletePerson(jQuery(this).attr('data-id')); } );
