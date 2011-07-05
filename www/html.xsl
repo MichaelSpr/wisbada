@@ -41,11 +41,11 @@
 	
 	<xsl:template name="editor">
 		<xsl:param name="personID" />
-		<a href="javascript:onEditPerson({$personID});" class="action edit" title="Bearbeiten"><span>Bearbeiten</span></a>
-		<a href="javascript:onDeletePerson({$personID});" class="action del" title="Löschen"><span>Löschen</span></a>
-		<a href="javascript:onAddPerson({$personID},'parent');" class="action addParent" title="Elternteil hinzufügen"><span>Elternteil hinzufügen</span></a>
-		<a href="javascript:onAddPerson({$personID},'partner');" class="action addPartner" title="Partner hinzufügen"><span>Partner hinzufügen</span></a>
-		<a href="javascript:onAddPerson({$personID},'child');" class="action addChild" title="Kind hinzufügen"><span>Kind hinzufügen</span></a>
+		<a data-id="{$personID}" class="action edit" title="Bearbeiten"><span>Bearbeiten</span></a>
+		<a data-id="{$personID}" class="action del" title="Löschen"><span>Löschen</span></a>
+		<a data-id="{$personID}" class="action addParent" title="Elternteil hinzufügen"><span>Elternteil hinzufügen</span></a>
+		<a data-id="{$personID}" class="action addPartner" title="Partner hinzufügen"><span>Partner hinzufügen</span></a>
+		<a data-id="{$personID}" class="action addChild" title="Kind hinzufügen"><span>Kind hinzufügen</span></a>
 	</xsl:template>
 	
 	<xsl:template name="partner" match="partner">

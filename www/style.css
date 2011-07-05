@@ -231,6 +231,7 @@ ul ul > .person.first.last:before {
 	position: absolute;
 	display: none;
 	overflow: hidden;
+	cursor: pointer;
 }
 .person:hover a.action {
 	display: block;

@@ -6,6 +6,7 @@ var STAMMBAUM = {};
 STAMMBAUM.view = {};
 STAMMBAUM.helper = {};
 STAMMBAUM.params = {};
+STAMMBAUM.events = {};
 
 /**
 *
@@ -24,7 +25,7 @@ STAMMBAUM.view.init = function(elem) {
 	
 	STAMMBAUM.params.token = /token=(\d{1,10})/.exec(document.location)[1];
 	
-	hookEvents();
+	STAMMBAUM.events.hookEvents();
 }
 STAMMBAUM.view.set_width = function(elem) {
 	var width = 0;
@@ -149,22 +150,22 @@ STAMMBAUM.view.dialog = function(data, options) {
 	
 }
 
-function onLinkNew() {
+STAMMBAUM.events.onLinkNew = function() {
 	// TODO: Fix this. We need to determin the location somehow different
 	document.location = (document.location.pathname)
 }
 
-function onLinkSVG() {
+STAMMBAUM.events.onLinkSVG = function() {
 	// TODO: Fix this. We need to determin the location somehow different
 	document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
 }
 
-function onLinkHTML() {
+STAMMBAUM.events.onLinkHTML = function() {
 	// TODO: Fix this. We need to determin the location somehow different
 	document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=html').replace(/&*$/g,'');
 }
 
-function onLinkExport() {
+STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
 		{ page: "GET", token: STAMMBAUM.params.token, outputStyle: 'xml' },
 		function(result) {
@@ -177,7 +178,7 @@ function onLinkExport() {
 	
 }
 
-function onLinkImport() {
+STAMMBAUM.events.onLinkImport = function() {
 
 	// Debug data; To be removed...
 	var xmlData = '<?xml version="1.0" encoding="UTF-8" ?>' +
@@ -252,29 +253,35 @@ function onLinkImport() {
 						});
 }
 
-function onLinkPerma() {
+STAMMBAUM.events.onLinkPerma = function() {
 	console.log('onLinkPerma');
 }
 
-function onLinkShare() {
+STAMMBAUM.events.onLinkShare = function() {
 	STAMMBAUM.view.dialog('<p>bla fasel</p>', {'title': 'Verteilen' });
 }
 
-function onDeletePerson(personId) {
+STAMMBAUM.events.onDeletePerson = function(personId) {
 	console.log( 'Delete Person ID' + personId);
 }
-function onAddPerson(personId, where) {
+STAMMBAUM.events.onAddPerson = function(personId, where) {
 	console.log( 'Add Person ID' + personId + ' ' + where );
 }
 
 
 // hook the events
-function hookEvents() {
-	$('#lnknew').click( onLinkNew );
-	$('#lnkviewsvg').click( onLinkSVG );
-	$('#lnkviewhtml').click( onLinkHTML );
-	$('#lnkexport').click( onLinkExport );
-	$('#lnkimport').click( onLinkImport );
-	$('#lnkperma').click( onLinkPerma );
-	$('#lnkshare').click( onLinkShare );
+STAMMBAUM.events.hookEvents = function() {
+	$('#lnknew').click( STAMMBAUM.events.onLinkNew );
+	$('#lnkviewsvg').click( STAMMBAUM.events.onLinkSVG );
+	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
+	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
+	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
+	$('#lnkperma').click( STAMMBAUM.events.onLinkPerma );
+	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
+	
+	jQuery('.action.edit').click( function() { STAMMBAUM.events.onEditPerson(jQuery(this).attr('data-id')); } );
+	jQuery('.action.del').click( function() { STAMMBAUM.events.onDeletePerson(jQuery(this).attr('data-id')); } );
+	jQuery('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'parent'); } );
+	jQuery('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'partner'); } );
+	jQuery('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'child'); } );
 }
