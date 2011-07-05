@@ -230,7 +230,6 @@ ul ul > .person.first.last:before {
 .person  a.action {
 	position: absolute;
 	display: none;
-	overflow: hidden;
 	cursor: pointer;
 }
 .person:hover a.action {
@@ -243,6 +242,7 @@ ul ul > .person.first.last:before {
 	height: 32px;
 	text-indent: -1000em;
 	background: url(img/icons.png) top left no-repeat transparent;
+	overflow: hidden;
 }
 
 .person  a.addParent span, .person  a.addPartner span, .person  a.addChild span {
@@ -360,16 +360,13 @@ ul.share li {
 	float: left;
 }
 
-ul.share a {
-	overflow: hidden;
-}
-
 ul.share span {
 	display: block;
 	width: 32px;
 	height: 32px;
 	text-indent: -1000em;
 	background: url(img/socialmedia.png) top left no-repeat transparent;
+	overflow: hidden;
 }
 
 ul.share .facebook span {
