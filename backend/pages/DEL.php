@@ -14,13 +14,16 @@ if (!empty($tokenid)) {
 		}      
 		if(isset($_REQUEST["pid"]) && $_REQUEST["pid"] != ""){
 			//Anzahl der Beziehungen prüfen
-			$a = $this->Data->execQuery("SELECT count(distinct(type)) AS Anzahl FROM beziehungen WHERE tid = '" . $tokenid . "' AND (id_1 = '".$_REQUEST["pid"]."' OR id_2 = '".$_REQUEST["pid"]."')");
-			$row = mysql_fetch_object($a);
-
+			$objCountChilds = $this->Data->execQuery("SELECT count(distinct(type)) AS Anzahl FROM beziehungen WHERE type = '2' AND tid = '" . $tokenid . "' AND id_2 = '".$_REQUEST["pid"]."';");
+			$countChilds = mysql_fetch_object($objCountChilds);
+			
+			$objCountParents = $this->Data->execQuery("SELECT count(distinct(type)) AS Anzahl FROM beziehungen WHERE  type = '2' AND tid = '" . $tokenid . "' AND id_1 = '".$_REQUEST["pid"]."';");
+			$countParents = mysql_fetch_object($objCountParents);
+			
 			$objCountPer = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM personen WHERE tid = '" . $tokenid . "';");
 			$countPers = mysql_fetch_object($objCountPer);	
-			
-			if ($row->Anzahl <= 1 && $countPers->Anzahl > 1) {
+	
+			if ( $countPers->Anzahl > 1 && ($countParents->Anzahl == 0 || $countChilds->Anzahl == 0)) {
 				$this->Data->execQuery("DELETE FROM personen WHERE tid = '" . $tokenid . "' AND pid = '".$_REQUEST["pid"]."';");
 				$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_1 = '".$_REQUEST["pid"]."';");
 				$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_2 = '".$_REQUEST["pid"]."';");
