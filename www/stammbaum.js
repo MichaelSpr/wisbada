@@ -23,8 +23,8 @@ STAMMBAUM.view.init = function(elem) {
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 	
-	STAMMBAUM.params.token = /token=(\d{1,10})/.exec(document.location)[1];
-	STAMMBAUM.params.shorturl = "http://www.google.de/?q=" + STAMMBAUM.params.token;
+	STAMMBAUM.params.startId = $('#board').attr('data-id');
+	STAMMBAUM.params.shorturl = document.location.href;
 	
 	STAMMBAUM.events.hookEvents();
 }
@@ -171,7 +171,7 @@ STAMMBAUM.events.onLinkHTML = function() {
 
 STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
-		{ page: "GET", token: STAMMBAUM.params.token, outputStyle: 'xml' },
+		{ page: "GET", outputStyle: 'xml' },
 		function(result) {
 			var serializer = new XMLSerializer();
 			var xml = serializer.serializeToString(result.documentElement);
@@ -237,7 +237,7 @@ STAMMBAUM.events.onLinkImport = function() {
 							 'primary': true,
 							 'callback': function(dialog) {
 								$.post("../index.php", 
-									{ page: "SET", token: STAMMBAUM.params.token, xml: dialog.data.find('textarea').val() },
+									{ page: "SET", xml: dialog.data.find('textarea').val() },
 									function(result) {
 										if (result == 1)
 										{
@@ -262,10 +262,39 @@ STAMMBAUM.events.onLinkShare = function() {
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
-	console.log( 'Delete Person ID' + personId);
+	$.get("../index.php", { page: "DEL", pid: personId},
+		function(result){
+			if (result.match(/^1;/))
+			{
+				console.log('Delete: success');
+				if (personID == STAMMBAUM.params.startId)
+					STAMMBAUM.events.loadWithRootPerson(STAMMBAUM.params.startId++); // TODO: pretty ugly. Try to find a better solution...
+				else
+					STAMMBAUM.events.loadWithRootPerson();
+			}
+			else
+			{
+				console.log('Delete: failed\n' + result);
+				result = result.replace(/^\d*;/,'');
+				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim L&ouml;schen!'});
+			}
+		}
+	);
 }
 STAMMBAUM.events.onAddPerson = function(personId, where) {
 	console.log( 'Add Person ID' + personId + ' ' + where );
+}
+STAMMBAUM.events.loadWithRootPerson = function(personId) {
+	// Todo / Remark:
+	// 		Intended behavior is not implemented yet!
+	//		This function has to do some rather complex calculations to find the
+	//		correct startperson.
+	//		startId != rootId != personId
+	if (personId == STAMMBAUM.params.startId)
+		return; // Nothing to do
+	if(personId==0 || personId==null)
+		personId = STAMMBAUM.params.startId;
+	document.location = '../index.php?page=GET&startat=' + personId;
 }
 
 
@@ -278,9 +307,10 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
 	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
 	
-	jQuery('.action.edit').click( function() { STAMMBAUM.events.onEditPerson(jQuery(this).attr('data-id')); } );
-	jQuery('.action.del').click( function() { STAMMBAUM.events.onDeletePerson(jQuery(this).attr('data-id')); } );
-	jQuery('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'parent'); } );
-	jQuery('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'partner'); } );
-	jQuery('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'child'); } );
+	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); } );
+	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); } );
+	$('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'parent'); } );
+	$('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'partner'); } );
+	$('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'child'); } );
+	$('.person>div').click( function() { STAMMBAUM.events.loadWithRootPerson($(this).parent().attr('data-id')); } );
 }
