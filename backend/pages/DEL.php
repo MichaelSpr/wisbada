@@ -1,38 +1,4 @@
 <?php
-//Funktion die die Errorausgabe abändert. Dadurch wird sie nicht von der Funktion schemaValidate als Exception ausgegeben, sondern abgefangen!
-function libxml_display_error($error)
-{
-    $return = "<br/>\n";
-    switch ($error->level) {
-        case LIBXML_ERR_WARNING:
-            $return .= "<b>Warning $error->code</b>: ";
-            break;
-        case LIBXML_ERR_ERROR:
-            $return .= "<b>Error $error->code</b>: ";
-            break;
-        case LIBXML_ERR_FATAL:
-            $return .= "<b>Fatal Error $error->code</b>: ";
-            break;
-    }
-    $return .= trim($error->message);
-    if ($error->file) {
-        $return .=    " in <b>$error->file</b>";
-    }
-    $return .= " on line <b>$error->line</b>\n";
-
-    return $return;
-}
-//Funktion die die Errorausgabe abändert. Dadurch wird sie nicht von der Funktion schemaValidate als Exception ausgegeben, sondern abgefangen!
-function libxml_display_errors() {
-    $errors = libxml_get_errors();
-    foreach ($errors as $error) {
-        print libxml_display_error($error);
-    }
-    libxml_clear_errors();
-}
-
-// User Error Handling erlauben
-libxml_use_internal_errors(true);
 
 //TokenID vorhande?
 $tokenid = $this->getToken();
@@ -47,13 +13,23 @@ if (!empty($tokenid)) {
 			echo "1;Beziehung gelöscht<br/>";
 		}      
 		if(isset($_REQUEST["pid"]) && $_REQUEST["pid"] != ""){
-			$this->Data->execQuery("DELETE FROM personen WHERE tid = '" . $tokenid . "' AND pid = '".$_REQUEST["pid"]."';");
-			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_1 = '".$_REQUEST["pid"]."';");
-			$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_2 = '".$_REQUEST["pid"]."';");
-			echo "1;Person und Beziehungen gelöscht<br/>";
+			//Anzahl der Beziehungen prüfen
+			$a = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM beziehungen WHERE tid = '" . $tokenid . "' AND (id_1 = '".$_REQUEST["pid"]."' OR id_2 = '".$_REQUEST["pid"]."')");
+			$row = mysql_fetch_object($a);
+
+			$objCountPer = $this->Data->execQuery("SELECT count(*) AS Anzahl FROM personen WHERE tid = '" . $tokenid . "';");
+			$countPers = mysql_fetch_object($objCountPer);	
+			
+			if (1 > $row->Anzahl && $countPers->Anzahl > 1) {
+				$this->Data->execQuery("DELETE FROM personen WHERE tid = '" . $tokenid . "' AND pid = '".$_REQUEST["pid"]."';");
+				$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_1 = '".$_REQUEST["pid"]."';");
+				$this->Data->execQuery("DELETE FROM beziehungen WHERE tid = '" . $tokenid . "' AND id_2 = '".$_REQUEST["pid"]."';");
+				echo "1;Person und Beziehungen gelöscht<br/>";
+			}else{
+				echo "0;Person besitzt zu viele Beziehungen oder ist die einzige Person<br/>";
+			}			
 		}
 		
-		  
     } else {
         //0 mit Fehlermeldung zurückgeben
         $this->Log->addMessage(get_class($this), __FUNCTION__, LogMessage::WARNING, "Aufruf ohne GET!");
