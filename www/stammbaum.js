@@ -116,17 +116,18 @@ STAMMBAUM.view.dialog = function(data, options) {
 		overlayId: 'dialog-overlay',
 		containerId: 'dialog-container',
 		minWidth: '50%',
+		overlayClose: true,
 		onOpen: function (dialog) {
 			dialog.overlay.fadeIn('slow', function () {
 				dialog.data.show();
-				dialog.container.fadeIn('slow');
+				dialog.container.fadeIn('fast');
 				dialog.container.width( dialog.data.width() );
 				dialog.container.height( dialog.data.height() );
 			});
 		},
 		onClose: function (dialog) {
-			dialog.container.fadeOut('slow', function () {
-				dialog.overlay.fadeOut('slow', function () {
+			dialog.container.fadeOut('fast', function () {
+				dialog.overlay.fadeOut('fast', function () {
 					$.modal.close(); // must call this!
 				});
 			});
@@ -267,7 +268,7 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 			if (result.match(/^1;/))
 			{
 				console.log('Delete: success');
-				if (personID == STAMMBAUM.params.startId)
+				if (personId == STAMMBAUM.params.startId)
 					STAMMBAUM.events.loadWithRootPerson(STAMMBAUM.params.startId++); // TODO: pretty ugly. Try to find a better solution...
 				else
 					STAMMBAUM.events.loadWithRootPerson();
