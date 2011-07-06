@@ -7,6 +7,7 @@ STAMMBAUM.view = {};
 STAMMBAUM.helper = {};
 STAMMBAUM.params = {};
 STAMMBAUM.events = {};
+STAMMBAUM.config = {};
 
 /**
 *
@@ -23,7 +24,8 @@ STAMMBAUM.view.init = function(elem) {
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 	
-	STAMMBAUM.params.token = /token=(\d{1,10})/.exec(document.location)[1];
+	STAMMBAUM.params.startId = $('#board').attr('data-id');
+	STAMMBAUM.params.shorturl = document.location.href;
 	
 	STAMMBAUM.events.hookEvents();
 }
@@ -104,9 +106,19 @@ STAMMBAUM.helper.round = function(number, precision) {
 	return Math.round(number*verschiebung)/verschiebung;
 }
 
+/**
+* Configuration
+*/
+STAMMBAUM.config.socialmedia = {
+	'facebook': { 'name': 'Facebook', 'share': { 'url': 'http://www.facebook.com/sharer.php?u=%URL%', 'popup': true, 'width': 600, 'height': 250 } },
+	'twitter': { 'name': 'Twitter', 'share': { 'url': 'http://www.twitter.com/share?url=%URL%', 'popup': true, 'width': 600, 'height': 250 } },
+	'xing': { 'name': 'Xing', 'share': { 'url': 'https://www.xing.com/app/user?op=share;url=%URL%', 'popup': false } },
+	'vz': { 'name': 'VZ Netzwerke', 'share': { 'url': 'http://platform-redirect.vz-modules.net/r/Link/Share/?url=%URL%', 'popup': true, 'width': 600, 'height': 400 } }
+}
+
 // Todo: Give the dialog the correct size
 STAMMBAUM.view.dialog = function(data, options) {
-	var opts = jQuery.extend({ 'title': '', 'buttons' : [] }, options);
+	var opts = jQuery.extend({ 'title': '', 'buttons' : [], 'onShow': null }, options);
 	var cnt = jQuery("<div></div>").prepend(data);
 	if(opts.title != '') cnt.prepend("<h3>" + opts.title + "</h3>");
 	
@@ -115,17 +127,18 @@ STAMMBAUM.view.dialog = function(data, options) {
 		overlayId: 'dialog-overlay',
 		containerId: 'dialog-container',
 		minWidth: '50%',
+		overlayClose: true,
 		onOpen: function (dialog) {
 			dialog.overlay.fadeIn('slow', function () {
 				dialog.data.show();
-				dialog.container.fadeIn('slow');
+				dialog.container.fadeIn('fast');
 				dialog.container.width( dialog.data.width() );
 				dialog.container.height( dialog.data.height() );
 			});
 		},
 		onClose: function (dialog) {
-			dialog.container.fadeOut('slow', function () {
-				dialog.overlay.fadeOut('slow', function () {
+			dialog.container.fadeOut('fast', function () {
+				dialog.overlay.fadeOut('fast', function () {
 					$.modal.close(); // must call this!
 				});
 			});
@@ -143,6 +156,9 @@ STAMMBAUM.view.dialog = function(data, options) {
 					btns.append(tmp);
 				}
 				cnt.append(btns);
+			}
+			if(opts.onShow != null) {
+				opts.onShow(dialog);
 			}
 		}
 	});
@@ -167,7 +183,7 @@ STAMMBAUM.events.onLinkHTML = function() {
 
 STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
-		{ page: "GET", token: STAMMBAUM.params.token, outputStyle: 'xml' },
+		{ page: "GET", outputStyle: 'xml' },
 		function(result) {
 			var serializer = new XMLSerializer();
 			var xml = serializer.serializeToString(result.documentElement);
@@ -233,7 +249,7 @@ STAMMBAUM.events.onLinkImport = function() {
 							 'primary': true,
 							 'callback': function(dialog) {
 								$.post("../index.php", 
-									{ page: "SET", token: STAMMBAUM.params.token, xml: dialog.data.find('textarea').val() },
+									{ page: "SET", xml: dialog.data.find('textarea').val() },
 									function(result) {
 										if (result == 1)
 										{
@@ -253,19 +269,60 @@ STAMMBAUM.events.onLinkImport = function() {
 						});
 }
 
-STAMMBAUM.events.onLinkPerma = function() {
-	console.log('onLinkPerma');
-}
-
 STAMMBAUM.events.onLinkShare = function() {
-	STAMMBAUM.view.dialog('<p>bla fasel</p>', {'title': 'Verteilen' });
+	var shareDialog = '<h4>Permalink</h4>';
+	shareDialog += '<p>Um diese Seite Ihren Freunden und Verwandten zu zeigen, nutzen Sie bitte diese URL:</p><input type="text" name="permalink" class="permalink" value="' + STAMMBAUM.params.shorturl + '" />';
+	shareDialog += '<h4>Teile diesen Stammbaum auf...</h4><ul class="share clearfix"></ul>';
+	shareDialog = jQuery('<div>' + shareDialog + '</div>');
+	
+	var $ul = shareDialog.children("ul");
+	
+	for(var nname in STAMMBAUM.config.socialmedia) {
+		var network = STAMMBAUM.config.socialmedia[nname];
+		var $li = jQuery('<li><a href="' + network.share.url.replace('%URL%', escape(STAMMBAUM.params.shorturl)) + '" target="_blank" title="' + network.name + '" class="' + nname + '"><span>' + network.name + '</span></a></li>');
+		if(network.share.popup) {
+			$li.children("a").click( (function(network) { return function() { window.open( jQuery(this).attr('href'), '', 'width=' + network.share.width + ',height=' + network.share.height ); return false; } })(network) );
+		}
+		$ul.append($li);
+	}
+	
+	STAMMBAUM.view.dialog(shareDialog, {'title': 'Verteilen' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
-	console.log( 'Delete Person ID' + personId);
+	$.get("../index.php", { page: "DEL", pid: personId},
+		function(result){
+			if (result.match(/^1;/))
+			{
+				console.log('Delete: success');
+				if (personId == STAMMBAUM.params.startId)
+					STAMMBAUM.events.loadWithRootPerson(STAMMBAUM.params.startId++); // TODO: pretty ugly. Try to find a better solution...
+				else
+					STAMMBAUM.events.loadWithRootPerson();
+			}
+			else
+			{
+				console.log('Delete: failed\n' + result);
+				result = result.replace(/^\d*;/,'');
+				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim L&ouml;schen!'});
+			}
+		}
+	);
 }
 STAMMBAUM.events.onAddPerson = function(personId, where) {
 	console.log( 'Add Person ID' + personId + ' ' + where );
+}
+STAMMBAUM.events.loadWithRootPerson = function(personId) {
+	// Todo / Remark:
+	// 		Intended behavior is not implemented yet!
+	//		This function has to do some rather complex calculations to find the
+	//		correct startperson.
+	//		startId != rootId != personId
+	if (personId == STAMMBAUM.params.startId)
+		return; // Nothing to do
+	if(personId==0 || personId==null)
+		personId = STAMMBAUM.params.startId;
+	document.location = '../index.php?page=GET&startat=' + personId;
 }
 
 
@@ -276,12 +333,12 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
-	$('#lnkperma').click( STAMMBAUM.events.onLinkPerma );
-	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
 	
-	jQuery('.action.edit').click( function() { STAMMBAUM.events.onEditPerson(jQuery(this).attr('data-id')); } );
-	jQuery('.action.del').click( function() { STAMMBAUM.events.onDeletePerson(jQuery(this).attr('data-id')); } );
-	jQuery('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'parent'); } );
-	jQuery('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'partner'); } );
-	jQuery('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson(jQuery(this).attr('data-id'),'child'); } );
+	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); } );
+	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); } );
+	$('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'parent'); } );
+	$('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'partner'); } );
+	$('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'child'); } );
+	$('.person>div').click( function() { STAMMBAUM.events.loadWithRootPerson($(this).parent().attr('data-id')); } );
 }
