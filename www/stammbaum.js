@@ -1,7 +1,7 @@
-/**
+﻿/**
 * init namespace "Stammbaum"
 */
- 
+
 var STAMMBAUM = {};
 STAMMBAUM.view = {};
 STAMMBAUM.helper = {};
@@ -14,6 +14,22 @@ STAMMBAUM.config = {};
 */
 STAMMBAUM.view.width = 150;
 STAMMBAUM.view.init = function(elem) {
+
+	STAMMBAUM.params.startId = parseInt(elem.attr('data-id'));
+	STAMMBAUM.params.lastPersonId = parseInt(elem.attr('data-lastpersonid'));
+	STAMMBAUM.params.lastBeziehungsId = parseInt((elem.attr('data-lastbeziehungsid') == '')?'0':elem.attr('data-lastbeziehungsid'));
+	STAMMBAUM.params.shorturl = document.location.href;
+	
+	STAMMBAUM.events.hookEvents();
+	
+	if (STAMMBAUM.view.loadSVG!=null)
+		STAMMBAUM.view.loadSVG();
+	else if (STAMMBAUM.view.loadHTML != null)
+		STAMMBAUM.view.loadHTML(elem);
+		
+}
+
+STAMMBAUM.view.loadHTML = function(elem) {
 	var main_ul = elem.children("ul");
 	STAMMBAUM.view.set_width(main_ul);
 	STAMMBAUM.view.fillLines(main_ul);
@@ -23,11 +39,6 @@ STAMMBAUM.view.init = function(elem) {
 		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
-	
-	STAMMBAUM.params.startId = $('#board').attr('data-id');
-	STAMMBAUM.params.shorturl = document.location.href;
-	
-	STAMMBAUM.events.hookEvents();
 }
 STAMMBAUM.view.set_width = function(elem) {
 	var width = 0;
@@ -173,7 +184,10 @@ STAMMBAUM.events.onLinkNew = function() {
 
 STAMMBAUM.events.onLinkSVG = function() {
 	// TODO: Fix this. We need to determin the location somehow different
-	document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
+	if (document.location.href.match(/outputStyle/))
+		document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
+	else
+		document.location = document.location.href + '&outputStyle=svg';
 }
 
 STAMMBAUM.events.onLinkHTML = function() {
@@ -197,49 +211,7 @@ STAMMBAUM.events.onLinkExport = function() {
 STAMMBAUM.events.onLinkImport = function() {
 
 	// Debug data; To be removed...
-	var xmlData = '<?xml version="1.0" encoding="UTF-8" ?>' +
-		'<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" token="1" xsi:noNamespaceSchemaLocation="stammbaum.xsd">' +
-		'    <personen>' +
-		'        <person id="1">' +
-		'            <name>Simpson</name>' +
-		'            <vorname>Homer Jay</vorname>' +
-		'            <geburtsort>Springfield</geburtsort>' +
-		'            <geburtsdatum>1989-12-17</geburtsdatum>' +
-		'            <sterbeort></sterbeort>' +
-		'            <todesdatum>1900-01-01</todesdatum>' +
-		'            <geschlecht>m</geschlecht>' +
-		'            <bild/>' +
-		'            <sonstiges/>' +
-		'        </person>' +
-		'        <person id="2">' +
-		'            <name>Simpson</name>' +
-		'            <vorname>Marjorie "Marge"</vorname>' +
-		'            <geburtsort>Springfield</geburtsort>' +
-		'            <geburtsdatum>1989-12-17</geburtsdatum>' +
-		'            <sterbeort></sterbeort>' +
-		'            <todesdatum>1900-01-01</todesdatum>' +
-		'            <geschlecht>w</geschlecht>' +
-		'            <bild/>' +
-		'            <sonstiges/>' +
-		'        </person>' +
-		'        <person id="3">' +
-		'            <name>Simpson</name>' +
-		'            <vorname>Bartholomew JoJo "Bart"</vorname>' +
-		'            <geburtsort>Springfield</geburtsort>' +
-		'            <geburtsdatum>1989-12-17</geburtsdatum>' +
-		'            <sterbeort></sterbeort>' +
-		'            <todesdatum>1900-01-01</todesdatum>' +
-		'            <geschlecht>m</geschlecht>' +
-		'            <bild/>' +
-		'            <sonstiges/>' +
-		'        </person>' +
-		'    </personen>' +
-		'    <beziehungen>' +
-		'        <partner id="1" partnerEins="1" partnerZwei="2"/>' +
-		'        <kind id="2" elternteil="1" kind="3"/>' +
-		'        <kind id="3" elternteil="2" kind="3"/>' +
-		'    </beziehungen>' + 
-		'</familie>';
+	var xmlData = '<familie token="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="1"><name>Müller</name><vorname>Heinrich</vorname><geburtsort>Hamburg</geburtsort><geburtsdatum>1870-12-17</geburtsdatum><sterbeort>München</sterbeort><todesdatum>1950-07-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="2"><name>Müller</name><vorname>Bertada</vorname><geburtsort>Hamburg</geburtsort><geburtsdatum>1872-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1955-08-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="3"><name>Müller</name><vorname>Henry</vorname><geburtsort>Dortmund</geburtsort><geburtsdatum>1893-12-17</geburtsdatum><sterbeort>Paris</sterbeort><todesdatum>1990-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="4"><name>Mandorf</name><vorname>Agnes</vorname><geburtsort>Dortmund</geburtsort><geburtsdatum>1897-12-17</geburtsdatum><sterbeort>Dortmund</sterbeort><todesdatum>2000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="5"><name>Müller</name><vorname>Gerda</vorname><geburtsort>Köln</geburtsort><geburtsdatum>1895-12-17</geburtsdatum><sterbeort>Paris</sterbeort><todesdatum>2000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="6"><name>Müller</name><vorname>Kurt</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1910-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>1990-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="7"><name>Müller</name><vorname>Heinrich</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1913-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1942-05-05</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges>Im Krieg gefallen</sonstiges></person><person id="8"><name>Müller</name><vorname>Anna</vorname><geburtsort>Gießen</geburtsort><geburtsdatum>1912-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>1992-05-05</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="9"><name>Müller</name><vorname>Johann</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1942-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>2008-05-05</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="10"><name>Müller</name><vorname>Johanna</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1945-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>2008-05-05</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="11"><name>Müller</name><vorname>Charles</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1970-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="12"><name>Müller</name><vorname>Mathias</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1972-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="13"><name>Müller</name><vorname>Theodor</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1975-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="14"><name>Müller</name><vorname>Phillipp</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1978-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="15"><name>Müller</name><vorname>Charlotta</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="16"><name>Müller</name><vorname>Thorsten</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1993-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="17"><name>Müller</name><vorname>Tim</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1995-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="18"><name>Müller</name><vorname>Jan</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1998-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="19"><name>Böhmen</name><vorname>Gertrud</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1945-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="20"><name>Böhmen</name><vorname>Wilhelm</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1943-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="21"><name>Schwarz</name><vorname>Gisa</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1973-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="22"><name>Schwarz</name><vorname>Thorsten</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="24"><name>Habsburg</name><vorname>Lisa</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1975-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="25"><name>Habsburg</name><vorname>Reiner</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="23"><name>Habsburg</name><vorname>Peter</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen><partner id="1" partnerEins="1" partnerZwei="2"></partner><partner id="6" partnerEins="3" partnerZwei="5"></partner><partner id="11" partnerEins="6" partnerZwei="8"></partner><partner id="14" partnerEins="9" partnerZwei="10"></partner><partner id="23" partnerEins="11" partnerZwei="15"></partner><partner id="32" partnerEins="19" partnerZwei="20"></partner><partner id="35" partnerEins="21" partnerZwei="22"></partner><partner id="40" partnerEins="24" partnerZwei="25"></partner><kind id="2" elternteil="1" kind="3"></kind><kind id="3" elternteil="2" kind="3"></kind><kind id="4" elternteil="1" kind="4"></kind><kind id="5" elternteil="2" kind="4"></kind><kind id="7" elternteil="3" kind="6"></kind><kind id="9" elternteil="5" kind="7"></kind><kind id="12" elternteil="6" kind="9"></kind><kind id="13" elternteil="8" kind="9"></kind><kind id="15" elternteil="9" kind="11"></kind><kind id="16" elternteil="9" kind="12"></kind><kind id="17" elternteil="9" kind="13"></kind><kind id="18" elternteil="9" kind="14"></kind><kind id="19" elternteil="10" kind="11"></kind><kind id="20" elternteil="10" kind="12"></kind><kind id="21" elternteil="10" kind="13"></kind><kind id="22" elternteil="10" kind="14"></kind><kind id="24" elternteil="11" kind="18"></kind><kind id="25" elternteil="11" kind="17"></kind><kind id="26" elternteil="11" kind="16"></kind><kind id="27" elternteil="15" kind="16"></kind><kind id="28" elternteil="15" kind="17"></kind><kind id="29" elternteil="15" kind="18"></kind><kind id="30" elternteil="6" kind="19"></kind><kind id="31" elternteil="8" kind="19"></kind><kind id="33" elternteil="19" kind="21"></kind><kind id="34" elternteil="20" kind="21"></kind><kind id="36" elternteil="21" kind="23"></kind><kind id="37" elternteil="22" kind="23"></kind><kind id="38" elternteil="19" kind="24"></kind><kind id="39" elternteil="20" kind="24"></kind></beziehungen></familie>';
 		
 	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xmlData +'</textarea>',
 						{'title': "Import",
@@ -254,7 +226,7 @@ STAMMBAUM.events.onLinkImport = function() {
 										if (result == 1)
 										{
 											console.log('IMPORT: success');
-											location.reload();
+											STAMMBAUM.events.loadWithRootPerson();
 										}
 										else
 										{
@@ -308,11 +280,44 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 			}
 		}
 	);
+	return false;
 }
 STAMMBAUM.events.onAddPerson = function(personId, where) {
-	console.log( 'Add Person ID' + personId + ' ' + where );
+		
+	newId = parseInt(STAMMBAUM.params.lastPersonId) + 1;
+
+	if (where == 'child')
+		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" elternteil="'+personId+'" kind="'+newId+'" />';
+	if (where == 'parent')
+		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" elternteil="'+newId+'" kind="'+personId+'" />';
+	if (where == 'partner')
+		relationship = '<partner id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" partnerEins="'+personId+'" partnerZwei="'+newId+'" />';
+		
+	if (relationship == null)
+		return false;	
+		
+	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum>1900-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
+	
+	$.post("../index.php", 
+		{ page: "SET", xml: preparedXML },
+		function(result) {
+			if (result.match('^1'))
+			{
+				console.log('ADD: success');
+				console.log('xml: '+ preparedXML);
+				STAMMBAUM.events.loadWithRootPerson();
+			}
+			else
+			{
+				console.log('ADD: failed\n' + result);
+				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Hinzufügen einer Person!'});
+			}
+		}
+	);
+	return false;
 }
 STAMMBAUM.events.loadWithRootPerson = function(personId) {
+
 	// Todo / Remark:
 	// 		Intended behavior is not implemented yet!
 	//		This function has to do some rather complex calculations to find the
@@ -322,7 +327,14 @@ STAMMBAUM.events.loadWithRootPerson = function(personId) {
 		return; // Nothing to do
 	if(personId==0 || personId==null)
 		personId = STAMMBAUM.params.startId;
+	if (personId==null)
+		personId=1;
+		
+	console.log( 'RELOAD: ../index.php?page=GET&startat=' + personId );
+	location.reload();
+	return false; // TODO: FIX THIS FUNCTION!
 	document.location = '../index.php?page=GET&startat=' + personId;
+	return false;
 }
 
 
