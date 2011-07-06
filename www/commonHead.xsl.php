@@ -4,8 +4,12 @@
 	echo '<?xml version="1.0" encoding="UTF-8"?'.html_entity_decode('&gt;');
 //	-->
 ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
-	
+<xsl:stylesheet version="1.0" 
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:svg ="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+
 	<xsl:variable name="phpTest"><![CDATA[<?='XX' ?>]]></xsl:variable>
 	<xsl:variable name="base"><![CDATA[<?=dirname($_SERVER["SCRIPT_URI"]).'/'; ?>]]></xsl:variable>
 	
@@ -63,7 +67,23 @@
 							</li>
 						</ul>
 					</div>
-					<div id="board">
+					<xsl:variable name="lastpersonid">
+						<xsl:for-each select="/familie/personen/person">
+							<xsl:sort select="./@id" order="descending" data-type="number" />
+							<xsl:if test="position()=1">
+								<xsl:value-of select="./@id" />
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:variable>
+					<xsl:variable name="lastbeziehungsid">
+						<xsl:for-each select="/familie/beziehungen/*">
+							<xsl:sort select="./@id" order="descending" data-type="number" />
+							<xsl:if test="position()=1">
+								<xsl:value-of select="./@id" />
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:variable>
+					<div id="board" data-lastpersonid="{$lastpersonid}" data-lastbeziehungsid="{$lastbeziehungsid}">
 						<xsl:attribute name="data-id">
 							<xsl:value-of select="$startId" />
 						</xsl:attribute>
