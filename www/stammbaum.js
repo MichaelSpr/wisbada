@@ -293,10 +293,10 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
 	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
 	
-	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); } );
-	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); } );
-	$('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'parent'); } );
-	$('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'partner'); } );
-	$('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'child'); } );
-	$('.person>div').click( function() { STAMMBAUM.events.loadWithRootPerson($(this).parent().attr('data-id')); } );
+	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); return false; } );
+	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); return false; } );
+	$('.action.addParent').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'parent'); return false; } );
+	$('.action.addPartner').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'partner'); return false; } );
+	$('.action.addChild').click( function() { STAMMBAUM.events.onAddPerson($(this).attr('data-id'),'child'); return false; } );
+	$('.person>div').click( function() { STAMMBAUM.events.loadWithRootPerson($(this).parent().attr('data-id')); return false; } );
 }

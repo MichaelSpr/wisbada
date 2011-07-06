@@ -22,8 +22,8 @@
 				<link rel="stylesheet" type="text/css" href="style.css"/>
 				<script type="text/javascript" src="libs/jquery-1.6.1.min.js" ></script>
 				<script type="text/javascript" src="libs/jquery.simplemodal.js"></script>
-				<script type="text/javascript" src="editor.js" ></script>
 				<script type="text/javascript" src="stammbaum.js" ></script>
+				<script type="text/javascript" src="editor.js" ></script>
 				<script type="text/javascript"><![CDATA[
 					jQuery(document).ready(function() {
 						STAMMBAUM.view.init(jQuery("#board"));
