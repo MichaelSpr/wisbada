@@ -154,6 +154,20 @@ body {
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 }
 
+.person.male > div {
+	background: #f1f9ff;
+}
+
+.person.female > div {
+	background: #fdf1ff;
+}
+
+.person img {
+	max-width: 40px;
+	max-height: 40px;
+	float: left;
+}
+
 .paar {
 	float: left;
 }

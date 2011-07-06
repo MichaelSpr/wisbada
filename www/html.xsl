@@ -11,17 +11,9 @@
 					<xsl:apply-templates select="//partner[@partnerEins=$startId or @partnerZwei=$startId]" />
 				</xsl:when>
 				<xsl:otherwise>
-					<li>
-						<xsl:attribute name="class">
-							person first last
-						</xsl:attribute>
-						<xsl:attribute name="data-id">
-							<xsl:value-of select="$startId" />
-						</xsl:attribute>
-						<div>
-							<xsl:apply-templates select="//person[@id=$startId]"/>
-						</div>
-					</li>
+					<xsl:call-template name="singleperson" >
+						<xsl:with-param name="pid" select="$startId"/>
+					</xsl:call-template>
 				</xsl:otherwise>
 			</xsl:choose>
 		</ul>
@@ -31,6 +23,12 @@
 		<xsl:call-template name="editor" >
 			<xsl:with-param name="personID" select="./@id"/>
 		</xsl:call-template>
+		<xsl:if test="./bild!=''">
+			<img>
+				<xsl:attribute name="src"><xsl:value-of select="./bild" /></xsl:attribute>
+				<xsl:attribute name="alt"><xsl:value-of select="./vorname" /><xsl:text><![CDATA[ ]]></xsl:text><xsl:value-of select="./name"/></xsl:attribute>
+			</img>
+		</xsl:if>
 		<h4>
 			<xsl:value-of select="./vorname"/>
 			<xsl:text><![CDATA[]]>
@@ -46,6 +44,22 @@
 		<a data-id="{$personID}" class="action addParent" title="Elternteil hinzufügen"><span>Elternteil hinzufügen</span></a>
 		<a data-id="{$personID}" class="action addPartner" title="Partner hinzufügen"><span>Partner hinzufügen</span></a>
 		<a data-id="{$personID}" class="action addChild" title="Kind hinzufügen"><span>Kind hinzufügen</span></a>
+	</xsl:template>
+	
+	<xsl:template name="singleperson">
+		<xsl:param name="pid" />
+		<li>
+			<xsl:attribute name="class">
+				person first last
+				<xsl:choose><xsl:when test="//person[@id=$pid]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
+			</xsl:attribute>
+			<xsl:attribute name="data-id">
+				<xsl:value-of select="$pid" />
+			</xsl:attribute>
+			<div>
+				<xsl:apply-templates select="//person[@id=$pid]"/>
+			</div>
+		</li>
 	</xsl:template>
 	
 	<xsl:template name="partner" match="partner">
@@ -70,6 +84,7 @@
 					<xsl:attribute name="class">
 						person first
 						<xsl:if test="$pkid!=$p1id"> noconnection</xsl:if>
+						<xsl:choose><xsl:when test="//person[@id=$p1id]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
 					</xsl:attribute>
 					<xsl:attribute name="data-id">
 						<xsl:value-of select="$p1id" />
@@ -82,6 +97,7 @@
 					<xsl:attribute name="class">
 						person last
 						<xsl:if test="$pkid!=$p2id"> noconnection</xsl:if>
+						<xsl:choose><xsl:when test="//person[@id=$p2id]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
 					</xsl:attribute>
 					<xsl:attribute name="data-id">
 						<xsl:value-of select="$p2id" />
@@ -128,6 +144,7 @@
 								person
 								<xsl:if test="$position=1"> first</xsl:if>
 								<xsl:if test="$position=$last"> last</xsl:if>
+								<xsl:choose><xsl:when test="//person[@id=$pkid]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
 							</xsl:attribute>
 							<xsl:attribute name="data-id">
 								<xsl:value-of select="$pkid" />
