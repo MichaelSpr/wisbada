@@ -155,11 +155,11 @@ body {
 }
 
 .person.male > div {
-	background: #f1f9ff;
+	background: url(img/genders.png) -140px 5px no-repeat #FFF;
 }
 
 .person.female > div {
-	background: #fdf1ff;
+	background: url(img/genders.png) 0 5px no-repeat #FFF;
 }
 
 .person img {
