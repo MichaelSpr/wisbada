@@ -33,7 +33,8 @@ STAMMBAUM.view.loadHTML = function(elem) {
 	var main_ul = elem.children("ul");
 	STAMMBAUM.view.set_width(main_ul);
 	STAMMBAUM.view.fillLines(main_ul);
-
+	STAMMBAUM.view.disableForbiddenActions(main_ul);
+	
 	var scale = STAMMBAUM.helper.round(elem.width()/(main_ul.width()), 3);
 	if(scale < 1) { //no upscaling
 		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
@@ -101,6 +102,17 @@ STAMMBAUM.view.fillLines = function(elem) {
 			STAMMBAUM.view.fillLines( jQuery(uls[0]) );
 		}
 	}
+}
+
+STAMMBAUM.view.disableForbiddenActions = function(elem) {
+	/* Remove "addPartner"-button if person has already a partner */
+	elem.find("li.paar > div > div > div .addPartner").remove();
+	
+	/* Remove "addParent"-button if person has already two parents */
+	/*...*/
+	
+	/* Remove "del"-button if person is not deletable */
+	/*...*/
 }
 
 /**
