@@ -26,7 +26,8 @@ STAMMBAUM.view.init = function(elem) {
 		STAMMBAUM.view.loadSVG();
 	else if (STAMMBAUM.view.loadHTML != null)
 		STAMMBAUM.view.loadHTML(elem);
-		
+	
+	jQuery(document).trigger("init_done");
 }
 
 STAMMBAUM.view.loadHTML = function(elem) {
