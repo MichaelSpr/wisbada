@@ -283,7 +283,7 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 STAMMBAUM.events.onAddPerson = function(personId, where) {
 		
 	newId = parseInt(STAMMBAUM.params.lastPersonId) + 1;
-
+	var relationship = '';
 	if (where == 'child')
 	{
 		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+personId+'" kind="'+newId+'" />';
@@ -295,9 +295,30 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 		}
 	}
 	if (where == 'parent')
-		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+newId+'" kind="'+personId+'" />';
+	{
+		try {
+			parentElem = $('.person[data-id="2"]').parents('li.parent').children('div').children('div.person');
+			parentsId = parentElem.attr('data-id');
+			parentsPartnerId = parentElem.attr('data-partnerid');
+			if (parentsPartnerId != null)
+			{ //abort! There is already an partner for his parent
+				console.log('WARNING: more than two parents are not supported!');
+				STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
+				return false;
+			}
+			relationship += '<partner id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" partnerEins="'+newId+'" partnerZwei="'+parentsId+'" />';
+		}
+		catch(e){}
+		relationship += '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+newId+'" kind="'+personId+'" />';
+	}
 	if (where == 'partner')
 	{
+		if ($('.person[data-partnerid="'+personId+'"]').length>0)
+		{
+			console.log('WARNING: more than two partners are not supported!');
+			STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
+			return false;
+		}
 		relationship = '<partner id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" partnerEins="'+personId+'" partnerZwei="'+newId+'" />';
 		var partnerElem = $('.person[data-id="'+ personId +'"]');
 		if (partnerElem != null && partnerElem.attr('data-children') !== undefined)
