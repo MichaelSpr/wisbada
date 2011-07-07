@@ -244,7 +244,7 @@ ul ul > li.paar.last > div > div.person.last:before {
 li.person.parent > div {
 	padding-bottom: 15px;
 	background: url(img/sprite-v1.png) top left no-repeat transparent;
-	background-position: -600px 65px;
+	background-position: -600px 66px;
 }
 
 .line {
