@@ -73,7 +73,13 @@
 					<xsl:attribute name="data-id">
 						<xsl:value-of select="$pid" />
 					</xsl:attribute>
-					
+					<xsl:if test="$has_children">
+						<xsl:attribute name="data-children">
+							<xsl:for-each select="//kind[@elternteil=$pid]">
+								<xsl:value-of select="./@kind" />,
+							</xsl:for-each>
+						</xsl:attribute>
+					</xsl:if>
 					<div>
 						<xsl:apply-templates select="//person[@id=$pid]"/>
 					</div>
@@ -117,6 +123,16 @@
 					<xsl:attribute name="data-id">
 						<xsl:value-of select="$p1id" />
 					</xsl:attribute>
+					<xsl:attribute name="data-partnerid">
+						<xsl:value-of select="$p2id" />
+					</xsl:attribute>
+					<xsl:if test="$has_children">
+						<xsl:attribute name="data-children">
+							<xsl:for-each select="//kind[@elternteil=$p1id]">
+								<xsl:value-of select="./@kind" />,
+							</xsl:for-each>
+						</xsl:attribute>
+					</xsl:if>
 					<div>
 						<xsl:apply-templates select="//person[@id=$p1id]"/>
 					</div>
@@ -130,6 +146,16 @@
 					<xsl:attribute name="data-id">
 						<xsl:value-of select="$p2id" />
 					</xsl:attribute>
+					<xsl:attribute name="data-partnerid">
+						<xsl:value-of select="$p1id" />
+					</xsl:attribute>
+					<xsl:if test="$has_children">
+						<xsl:attribute name="data-children">
+							<xsl:for-each select="//kind[@elternteil=$p2id]">
+								<xsl:value-of select="./@kind" />,
+							</xsl:for-each>
+						</xsl:attribute>
+					</xsl:if>
 					<div>
 						<xsl:apply-templates select="//person[@id=$p2id]"/>
 					</div>

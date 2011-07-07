@@ -17,7 +17,7 @@ STAMMBAUM.view.init = function(elem) {
 
 	STAMMBAUM.params.startId = parseInt(elem.attr('data-id'));
 	STAMMBAUM.params.lastPersonId = parseInt(elem.attr('data-lastpersonid'));
-	STAMMBAUM.params.lastBeziehungsId = parseInt((elem.attr('data-lastbeziehungsid') == '')?'0':elem.attr('data-lastbeziehungsid'));
+	STAMMBAUM.params.lastBeziehungsId = parseInt((elem.attr('data-lastbeziehungsid') == '')?'0':elem.attr('data-lastbeziehungsid'))+1;
 	STAMMBAUM.params.shorturl = document.location.href;
 	
 	STAMMBAUM.events.hookEvents();
@@ -237,7 +237,6 @@ STAMMBAUM.events.onLinkImport = function() {
 									function(result) {
 										if (result == 1)
 										{
-											console.log('IMPORT: success');
 											STAMMBAUM.events.loadWithRootPerson();
 										}
 										else
@@ -278,7 +277,6 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 		function(result){
 			if (result.match(/^1;/))
 			{
-				console.log('Delete: success');
 				if (personId == STAMMBAUM.params.startId)
 					STAMMBAUM.events.loadWithRootPerson(STAMMBAUM.params.startId++); // TODO: pretty ugly. Try to find a better solution...
 				else
@@ -297,16 +295,61 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 STAMMBAUM.events.onAddPerson = function(personId, where) {
 		
 	newId = parseInt(STAMMBAUM.params.lastPersonId) + 1;
-
+	var relationship = '';
 	if (where == 'child')
-		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" elternteil="'+personId+'" kind="'+newId+'" />';
+	{
+		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+personId+'" kind="'+newId+'" />';
+		var personElem = $('.person[data-id="'+ personId +'"]');
+		if (personElem != null && personElem.attr('data-partnerid') !== undefined)
+		{
+			var partnerId = personElem.attr('data-partnerid');
+			relationship += '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+partnerId+'" kind="'+newId+'" />';
+		}
+	}
 	if (where == 'parent')
-		relationship = '<kind id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" elternteil="'+newId+'" kind="'+personId+'" />';
+	{
+		try {
+			parentElem = $('.person[data-id="2"]').parents('li.parent').children('div').children('div.person');
+			parentsId = parentElem.attr('data-id');
+			parentsPartnerId = parentElem.attr('data-partnerid');
+			if (parentsPartnerId != null)
+			{ //abort! There is already an partner for his parent
+				console.log('WARNING: more than two parents are not supported!');
+				STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
+				return false;
+			}
+			relationship += '<partner id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" partnerEins="'+newId+'" partnerZwei="'+parentsId+'" />';
+		}
+		catch(e){}
+		relationship += '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+newId+'" kind="'+personId+'" />';
+	}
 	if (where == 'partner')
-		relationship = '<partner id="'+(STAMMBAUM.params.lastBeziehungsId+1) +'" partnerEins="'+personId+'" partnerZwei="'+newId+'" />';
+	{
+		if ($('.person[data-partnerid="'+personId+'"]').length>0)
+		{
+			console.log('WARNING: more than two partners are not supported!');
+			STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
+			return false;
+		}
+		relationship = '<partner id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" partnerEins="'+personId+'" partnerZwei="'+newId+'" />';
+		var partnerElem = $('.person[data-id="'+ personId +'"]');
+		if (partnerElem != null && partnerElem.attr('data-children') !== undefined)
+		{
+			var children = partnerElem.attr('data-children').trim().split(',');
+			if (children!=null && children.length>0)
+			{
+				$.each( children, function(index,child) {
+					child = child.trim();
+					if (child == '')
+						return;
+					relationship += '<kind id="'+(STAMMBAUM.params.lastBeziehungsId++) +'" elternteil="'+newId+'" kind="'+child+'" />';
+				});
+			}
+		}
+	}
 		
 	if (relationship == null)
-		return false;	
+		return false;
 		
 	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum>1900-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
 	
@@ -315,13 +358,12 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 		function(result) {
 			if (result.match('^1'))
 			{
-				console.log('ADD: success');
-				console.log('xml: '+ preparedXML);
 				STAMMBAUM.events.loadWithRootPerson();
 			}
 			else
 			{
 				console.log('ADD: failed\n' + result);
+				console.log('xml: '+ preparedXML);
 				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Hinzufügen einer Person!'});
 			}
 		}

@@ -1,4 +1,4 @@
-<?php header('Content-type: application/xml');
+﻿<?php header('Content-type: application/xml');
 
 // <!--
 	echo '<?xml version="1.0" encoding="UTF-8"?'.html_entity_decode('&gt;');
@@ -14,7 +14,10 @@
 	<xsl:variable name="base"><![CDATA[<?=dirname($_SERVER["SCRIPT_URI"]).'/'; ?>]]></xsl:variable>
 	
 	<xsl:template match="//familie">
-		<html>
+		<html xmlns="http://www.w3.org/1999/xhtml" 
+			xmlns:svg ="http://www.w3.org/2000/svg" 
+			xmlns:xlink="http://www.w3.org/1999/xlink" 
+			xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" >
 			<head>
 				<title>Stammbaum</title>
 				<xsl:choose>
