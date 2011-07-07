@@ -139,12 +139,16 @@ body {
 	 position: relative;
 }
 
-.person {
+li.person {
+	float: left;
+}
+
+.paar > div > div.person {
 	float: left;
 	width: 150px;
 }
 
-.person > div {
+div.person > div {
 	padding: 5px;
 	margin: 0 5px;
 	height: 40px;
@@ -154,15 +158,15 @@ body {
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 }
 
-.person.male > div {
+div.person.male > div {
 	background: url(img/genders.png) -140px 5px no-repeat #FFF;
 }
 
-.person.female > div {
+div.person.female > div {
 	background: url(img/genders.png) 0 5px no-repeat #FFF;
 }
 
-.person img {
+div.person img {
 	max-width: 40px;
 	max-height: 40px;
 	float: left;
@@ -172,13 +176,18 @@ body {
 	float: left;
 }
 
-.paar .wrap{
+li.person > .wrap {
+	width: 150px;
+	margin: 0 auto;
+}
+
+.paar > .wrap{
 	width: 300px;
 	margin: 0 auto;
 }
 		
 /* VERBINDUNGSLINIEN */
-.person:before {
+div.person:before {
 	display: block;
 	height: 15px;
 	padding: 0 5px 0 5px;
@@ -186,43 +195,43 @@ body {
 	content: " ";
 }
 
-ul ul > .person:before, ul ul > .paar > div > .person:before {
+ul ul > li > div > div.person:before, ul ul > .paar > div > div.person:before {
 	background-position: -450px 0;
 }
 
-ul ul > .paar > div > .person.noconnection:before {
+ul ul > .paar > div > div.person.noconnection:before {
 	background-position: -750px 0;
 }
 
-ul ul > .paar.first > div > .person.first:before {
+ul ul > .paar.first > div > div.person.first:before {
 	background-position: -150px 0;
 }
 
-ul ul > .paar.last > div > .person.first:before {
+ul ul > .paar.last > div > div.person.first:before {
 	background-position: -300px 0;
 }
 
-ul ul > .paar.last.first > div > .person.first:before {
+ul ul > .paar.last.first > div > div.person.first:before {
 	background-position: -150px 0;
 }
 
-ul ul > .paar.last > div > .person.last.noconnection:before {
+ul ul > .paar.last > div > div.person.last.noconnection:before {
 	background-position: 0 0;
 }
 
-ul ul > .paar.last > div > .person.last:before {
+ul ul > .paar.last > div > div.person.last:before {
 	background-position: -300px 0;
 }
 
-ul ul > .person.first:before {
+ul ul > li > div > div.person.first:before {
 	background-position: -150px 0;
 }
 
-ul ul > .person.last:before {
+ul ul > li > div > div.person.last:before {
 	background-position: -300px 0;
 }
 
-ul ul > .person.first.last:before {
+ul ul > li > div > div.person.first.last:before {
 	background-position: -600px 0;
 }
 
@@ -230,6 +239,12 @@ ul ul > .person.first.last:before {
 	padding-bottom: 30px;
 	background: url(img/sprite-v1.png) top left no-repeat transparent;
 	background-position: -900px bottom;
+}
+
+li.person.parent > div {
+	padding-bottom: 15px;
+	background: url(img/sprite-v1.png) top left no-repeat transparent;
+	background-position: -600px 65px;
 }
 
 .line {
@@ -241,17 +256,17 @@ ul ul > .person.first.last:before {
 }
 
 /** Person activities */
-.person  > div { position: relative; }
-.person  a.action {
+div.person  > div { position: relative; }
+div.person  a.action {
 	position: absolute;
 	display: none;
 	cursor: pointer;
 }
-.person:hover a.action {
+div.person > div:hover > a.action {
 	display: block;
 }
 
-.person  a.action span {
+div.person  a.action span {
 	display: block;
 	width: 32px;
 	height: 32px;
@@ -260,35 +275,35 @@ ul ul > .person.first.last:before {
 	overflow: hidden;
 }
 
-.person  a.addParent span, .person  a.addPartner span, .person  a.addChild span {
+div.person  a.addParent span, div.person  a.addPartner span, div.person  a.addChild span {
 	background-position: -32px 0;
 }
 
-.person  a.edit span {
+div.person  a.edit span {
 	background-position: -64px 0;
 }
 
-.person  a.del span {
+div.person  a.del span {
 	background-position: -96px 0;
 }
 
-.person  a.addParent {
+div.person  a.addParent {
 	left: 52px; top: -16px;
 }
 
-.person  a.addPartner {
+div.person  a.addPartner {
 	right: -16px; top: 8px;
 }
 
-.person  a.addChild {
+div.person  a.addChild {
 	left: 52px; bottom: -16px;
 }
 
-.person  a.edit {
+div.person  a.edit {
 	left: -16px; bottom: -16px;
 }
 
-.person  a.del {
+div.person  a.del {
 	left: -16px; bottom: 16px;
 }
 

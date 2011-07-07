@@ -13,6 +13,8 @@
 				<xsl:otherwise>
 					<xsl:call-template name="singleperson" >
 						<xsl:with-param name="pid" select="$startId"/>
+						<xsl:with-param name="position">1</xsl:with-param>
+						<xsl:with-param name="last">1</xsl:with-param>
 					</xsl:call-template>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -48,17 +50,43 @@
 	
 	<xsl:template name="singleperson">
 		<xsl:param name="pid" />
+		<xsl:param name="position">0</xsl:param>
+		<xsl:param name="last">0</xsl:param>
+		
+		<xsl:variable name="has_children" select="//kind[@elternteil=$pid][1]/@kind"/>
+		
 		<li>
 			<xsl:attribute name="class">
-				person first last
-				<xsl:choose><xsl:when test="//person[@id=$pid]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
+				person
+				<xsl:if test="$has_children"> parent</xsl:if>				
 			</xsl:attribute>
-			<xsl:attribute name="data-id">
-				<xsl:value-of select="$pid" />
-			</xsl:attribute>
-			<div>
-				<xsl:apply-templates select="//person[@id=$pid]"/>
+			
+			<div class="wrap clearfix">
+			
+				<div>
+					<xsl:attribute name="class">
+						person
+						<xsl:if test="$position=1"> first</xsl:if>
+						<xsl:if test="$position=$last"> last</xsl:if>
+						<xsl:choose><xsl:when test="//person[@id=$pid]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>	
+					</xsl:attribute>
+					<xsl:attribute name="data-id">
+						<xsl:value-of select="$pid" />
+					</xsl:attribute>
+					
+					<div>
+						<xsl:apply-templates select="//person[@id=$pid]"/>
+					</div>
+			
+				</div>
+				
 			</div>
+			
+			<xsl:if test="$has_children">
+				<xsl:call-template name="children">
+					<xsl:with-param name="p1id"><xsl:value-of select="$pid" /></xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
 		</li>
 	</xsl:template>
 	
@@ -121,7 +149,7 @@
 	
 	<xsl:template name="children">
 		<xsl:param name="p1id" />
-		<xsl:param name="p2id" />
+		<xsl:param name="p2id" >0</xsl:param>
 		
 		<ul class="clearfix">
 			<xsl:for-each select="//kind[@elternteil=$p1id]">
@@ -139,20 +167,11 @@
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:otherwise>
-						<li>
-							<xsl:attribute name="class">
-								person
-								<xsl:if test="$position=1"> first</xsl:if>
-								<xsl:if test="$position=$last"> last</xsl:if>
-								<xsl:choose><xsl:when test="//person[@id=$pkid]/geschlecht='m'"> male</xsl:when><xsl:otherwise> female</xsl:otherwise></xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="data-id">
-								<xsl:value-of select="$pkid" />
-							</xsl:attribute>
-							<div>
-								<xsl:apply-templates select="//person[@id=$pkid]"/>
-							</div>
-						</li>
+						<xsl:call-template name="singleperson" >
+							<xsl:with-param name="pid" select="$pkid"/>
+							<xsl:with-param name="position" select="$position" />
+							<xsl:with-param name="last" select="$last" />
+						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
 		
