@@ -195,34 +195,6 @@ div.person:before {
 	content: " ";
 }
 
-ul ul > li > div > div.person:before, ul ul > .paar > div > div.person:before {
-	background-position: -450px 0;
-}
-
-ul ul > .paar > div > div.person.noconnection:before {
-	background-position: -750px 0;
-}
-
-ul ul > .paar.first > div > div.person.first:before {
-	background-position: -150px 0;
-}
-
-ul ul > .paar.last > div > div.person.first:before {
-	background-position: -300px 0;
-}
-
-ul ul > .paar.last.first > div > div.person.first:before {
-	background-position: -150px 0;
-}
-
-ul ul > .paar.last > div > div.person.last.noconnection:before {
-	background-position: 0 0;
-}
-
-ul ul > .paar.last > div > div.person.last:before {
-	background-position: -300px 0;
-}
-
 ul ul > li > div > div.person.first:before {
 	background-position: -150px 0;
 }
@@ -233,6 +205,34 @@ ul ul > li > div > div.person.last:before {
 
 ul ul > li > div > div.person.first.last:before {
 	background-position: -600px 0;
+}
+
+ul ul > li > div > div.person:before, ul ul > li.paar > div > div.person:before {
+	background-position: -450px 0;
+}
+
+ul ul > li.paar > div > div.person.noconnection:before {
+	background-position: -750px 0;
+}
+
+ul ul > li.paar.first > div > div.person.first:before {
+	background-position: -150px 0;
+}
+
+ul ul > li.paar.last > div > div.person.first:before {
+	background-position: -300px 0;
+}
+
+ul ul > li.paar.last.first > div > div.person.first:before {
+	background-position: -150px 0;
+}
+
+ul ul > li.paar.last > div > div.person.last.noconnection:before {
+	background-position: 0 0;
+}
+
+ul ul > li.paar.last > div > div.person.last:before {
+	background-position: -300px 0;
 }
 
 .paar.parent > div {
