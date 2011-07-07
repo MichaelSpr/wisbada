@@ -236,6 +236,7 @@ ul ul > .person.first.last:before {
 	display: block;
 	height: 30px;
 	position: absolute;
+	top: 0;
 	background: url(img/hLine.png) top left repeat-x transparent;
 }
 
@@ -395,6 +396,28 @@ ul.share .xing span {
 ul.share .vz span {
 	background-position: -128px 0;
 }
+
+/* Editor */
+#inputcontainer table {
+	width: 100%;
+}
+
+#inputcontainer td {
+	padding-bottom: 5px;
+	vertical-align: top;
+	width: 28%;
+	padding-right: 2%;
+}
+
+#inputcontainer td.inputBezeichner {
+	width: 20%;
+	padding: 0;
+}
+
+#inputcontainer input, #inputcontainer select, #inputcontainer textarea {
+	width: 100%;
+}
+
 /* Clearfix */
 .clearfix:after {
 	content: ".";
