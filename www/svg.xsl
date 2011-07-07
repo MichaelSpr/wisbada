@@ -6,7 +6,7 @@
 	<xsl:output method="html" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
 	<xsl:variable name="startId" select="startid"/>
 	
-	<xsl:include href="commonHead.xsl"/> 
+	<xsl:include href="commonHead.xsl.php"/> 
 	
 	<xsl:template name="stammbaum">
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" >
