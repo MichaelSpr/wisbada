@@ -376,7 +376,7 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 	if (relationship == null)
 		return false;
 		
-	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum>1900-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
+	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
 	
 	$.post("../index.php", 
 		{ page: "SET", xml: preparedXML },
