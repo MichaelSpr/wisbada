@@ -116,6 +116,9 @@ STAMMBAUM.view.disableForbiddenActions = function(elem) {
 
 	/* Remove "del"-button if person is not deletable */
 	elem.find("li:has(ul) > div > div > div .del").remove();
+	
+	/* Remove the "del"-button for the root person */
+	elem.find('.person[data-id="'+STAMMBAUM.params.startId+'"] > div > .del').remove();
 }
 
 /**

@@ -102,8 +102,17 @@ function stopUpload(success, imgUrl){
 }
 
 function commitData(imgUrl) {
-	pid = person.pid;
-	var xmlstring = '<?xml version="1.0" encoding="UTF-8" ?><familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="stammbaum.xsd"><personen><person id="'+pid+'"><name>' + document.getElementById("nachname").value +  '</name><vorname>' + document.getElementById('vorname').value + '</vorname><geburtsort>' + document.getElementById('geburtsort').value + '</geburtsort><geburtsdatum>' + document.getElementById('geburtsdatum').value + '</geburtsdatum><sterbeort>' + document.getElementById('sterbeort').value + '</sterbeort><todesdatum>' + document.getElementById('todesdatum').value + '</todesdatum><geschlecht>' + document.getElementById('geschlecht').value + '</geschlecht><bild>'+((imgUrl==null)?person.bild:imgUrl)+'</bild><sonstiges>'+
+	pid = person.pid;	
+	var xmlstring = '<?xml version="1.0" encoding="UTF-8" ?><familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="stammbaum.xsd"><personen><person id="'+pid+'"><name>' + document.getElementById("nachname").value +  '</name><vorname>' + document.getElementById('vorname').value + '</vorname><geburtsort>' + document.getElementById('geburtsort').value + '</geburtsort><geburtsdatum>' + document.getElementById('geburtsdatum').value + '</geburtsdatum><sterbeort>' + document.getElementById('sterbeort').value + '</sterbeort>';
+	if((document.getElementById('todesdatum').value ==''))
+	{
+		xmlstring = xmlstring+ '<todesdatum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>';
+	}
+	else
+	{
+		xmlstring = xmlstring + '<todesdatum>' + document.getElementById('todesdatum').value + '</todesdatum>';
+	}
+	xmlstring = xmlstring + '<geschlecht>' + document.getElementById('geschlecht').value + '</geschlecht><bild>'+((imgUrl==null)?person.bild:imgUrl)+'</bild><sonstiges>'+
 	'<![CDATA['+document.getElementById('sonstiges').value +']]></sonstiges>'+
 	'</person></personen><beziehungen></beziehungen></familie>';
 
