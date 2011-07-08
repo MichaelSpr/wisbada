@@ -26,7 +26,8 @@ STAMMBAUM.view.init = function(elem) {
 		STAMMBAUM.view.loadSVG();
 	else if (STAMMBAUM.view.loadHTML != null)
 		STAMMBAUM.view.loadHTML(elem);
-		
+	
+	jQuery(document).trigger("init_done");
 }
 
 STAMMBAUM.view.loadHTML = function(elem) {
@@ -109,10 +110,10 @@ STAMMBAUM.view.disableForbiddenActions = function(elem) {
 	elem.find("li.paar > div > div > div .addPartner").remove();
 	
 	/* Remove "addParent"-button if person has already two parents */
-	/*...*/
-	
+	elem.find("li.paar > ul > li > div > div > div .addParent").remove();                
+
 	/* Remove "del"-button if person is not deletable */
-	/*...*/
+	elem.find("li:has(ul) > div > div > div .del").remove();
 }
 
 /**
@@ -127,6 +128,10 @@ STAMMBAUM.helper.getPersonCoordinates = function(elem) {
 STAMMBAUM.helper.round = function(number, precision) {
 	var verschiebung = Math.pow(10, precision);
 	return Math.round(number*verschiebung)/verschiebung;
+}
+
+STAMMBAUM.helper.log = function(msg) {
+	if ( typeof console == 'object' ) { console.log ( msg ); }
 }
 
 /**
@@ -241,7 +246,7 @@ STAMMBAUM.events.onLinkImport = function() {
 										}
 										else
 										{
-											console.log('IMPORT: failed\n' + result);
+											STAMMBAUM.helper.log('IMPORT: failed\n' + result);
 											STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Importvorgang!'});
 										}
 									}
@@ -284,7 +289,7 @@ STAMMBAUM.events.onDeletePerson = function(personId) {
 			}
 			else
 			{
-				console.log('Delete: failed\n' + result);
+				STAMMBAUM.helper.log('Delete: failed\n' + result);
 				result = result.replace(/^\d*;/,'');
 				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim L&ouml;schen!'});
 			}
@@ -314,7 +319,7 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 			parentsPartnerId = parentElem.attr('data-partnerid');
 			if (parentsPartnerId != null)
 			{ //abort! There is already an partner for his parent
-				console.log('WARNING: more than two parents are not supported!');
+				STAMMBAUM.helper.log('WARNING: more than two parents are not supported!');
 				STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
 				return false;
 			}
@@ -327,7 +332,7 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 	{
 		if ($('.person[data-partnerid="'+personId+'"]').length>0)
 		{
-			console.log('WARNING: more than two partners are not supported!');
+			STAMMBAUM.helper.log('WARNING: more than two partners are not supported!');
 			STAMMBAUM.view.dialog( '<p>Diese Version unterstützt nur zwei Elternteile</p>', {'title': 'Fehler beim Hinzufügen!'});
 			return false;
 		}
@@ -362,8 +367,8 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 			}
 			else
 			{
-				console.log('ADD: failed\n' + result);
-				console.log('xml: '+ preparedXML);
+				STAMMBAUM.helper.log('ADD: failed\n' + result);
+				STAMMBAUM.helper.log('xml: '+ preparedXML);
 				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Hinzufügen einer Person!'});
 			}
 		}
@@ -384,7 +389,7 @@ STAMMBAUM.events.loadWithRootPerson = function(personId) {
 	if (personId==null)
 		personId=1;
 		
-	console.log( 'RELOAD: ../index.php?page=GET&startat=' + personId );
+	STAMMBAUM.helper.log( 'RELOAD: ../index.php?page=GET&startat=' + personId );
 	location.reload();
 	return false; // TODO: FIX THIS FUNCTION!
 	document.location = '../index.php?page=GET&startat=' + personId;

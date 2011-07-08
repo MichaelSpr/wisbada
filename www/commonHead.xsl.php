@@ -37,6 +37,9 @@
 					});
 				]]>
 				</script>
+				<xsl:comment><![CDATA[[if lte IE 8]>
+				<script type="text/javascript" src="ie.js" ></script>
+				<![endif]]]></xsl:comment>
 			</head>
 			<body>
 				<div id="wrap">
