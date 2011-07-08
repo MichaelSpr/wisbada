@@ -66,10 +66,10 @@
 								<a id="lnkimport">Import</a>
 							</li>
 							<li>
-								<a id="lnkperma">Permalink</a>
+								<a id="lnkshare">Verteilen</a>
 							</li>
 							<li>
-								<a id="lnkshare">Verteilen</a>
+								<a id="lnkquickstart">Anleitung</a>
 							</li>
 						</ul>
 					</div>

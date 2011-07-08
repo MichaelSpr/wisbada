@@ -201,10 +201,12 @@ STAMMBAUM.events.onLinkNew = function() {
 
 STAMMBAUM.events.onLinkSVG = function() {
 	// TODO: Fix this. We need to determin the location somehow different
+	var loc = "";
 	if (document.location.href.match(/outputStyle/))
-		document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
+		loc = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
 	else
-		document.location = document.location.href + '&outputStyle=svg';
+		loc = document.location.href + '&outputStyle=svg';
+	window.open(loc);
 }
 
 STAMMBAUM.events.onLinkHTML = function() {
@@ -275,6 +277,10 @@ STAMMBAUM.events.onLinkShare = function() {
 	}
 	
 	STAMMBAUM.view.dialog(shareDialog, {'title': 'Verteilen' });
+}
+
+STAMMBAUM.events.onLinkQuickstart = function() {
+	STAMMBAUM.view.dialog("<p>&hellip;</p>", {'title': 'Anleitung' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
@@ -404,7 +410,8 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
-	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkquickstart').click( STAMMBAUM.events.onLinkQuickstart );
 	
 	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); return false; } );
 	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); return false; } );
