@@ -36,9 +36,11 @@ STAMMBAUM.view.loadHTML = function(elem) {
 	STAMMBAUM.view.fillLines(main_ul);
 	STAMMBAUM.view.disableForbiddenActions(main_ul);
 	
+	jQuery("div.person").hover(STAMMBAUM.events.onPersonHoverIn, STAMMBAUM.events.onPersonHoverOut);
+	
 	var scale = STAMMBAUM.helper.round(elem.width()/(main_ul.width()), 3);
 	if(scale < 1) { //no upscaling
-		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
+		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("-o-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 }
@@ -402,6 +404,18 @@ STAMMBAUM.events.loadWithRootPerson = function(personId) {
 	return false;
 }
 
+STAMMBAUM.events.onPersonHoverIn = function() {
+	var $detailbox = jQuery("div.detailbox");
+	var $elem = jQuery(this);
+	$detailbox.html($elem.find(".details").html());
+	$detailbox.show();
+}
+
+STAMMBAUM.events.onPersonHoverOut = function() {
+	var $detailbox = jQuery("div.detailbox");
+	$detailbox.hide();
+	$detailbox.html("");
+}
 
 // hook the events
 STAMMBAUM.events.hookEvents = function() {

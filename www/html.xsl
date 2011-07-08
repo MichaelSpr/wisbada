@@ -19,6 +19,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</ul>
+		<div class="detailbox"></div>
 	</xsl:template>
 
 	<xsl:template match="person">
@@ -37,13 +38,38 @@
 			</xsl:text>
 			<xsl:value-of select="./name"/>
 		</h4>
+		
+		<div class="details">
+			<xsl:if test="./bild!=''">
+				<img>
+					<xsl:attribute name="src"><xsl:value-of select="./bild" /></xsl:attribute>
+					<xsl:attribute name="alt"><xsl:value-of select="./vorname" /><xsl:text><![CDATA[ ]]></xsl:text><xsl:value-of select="./name"/></xsl:attribute>
+				</img>
+			</xsl:if>
+			<h3><xsl:value-of select="./vorname"/><xsl:text><![CDATA[ ]]></xsl:text><xsl:value-of select="./name"/></h3>
+			<xsl:if test="./geburtsdatum != '' or ./geburtsort != '' or ./sterbeort != '' or ./todesdatum != ''">
+				<dl>
+					<xsl:if test="./geburtsdatum != '' or ./geburtsort != ''">
+						<dt title="geboren">*</dt>
+						<dd><xsl:apply-templates select="./geburtsdatum" /> <xsl:if test="./geburtsort != ''"> in <xsl:value-of select="./geburtsort" /></xsl:if></dd>
+					</xsl:if>
+					<xsl:if test="./todesdatum != '' or ./sterbesort != ''">
+						<dt title="gestorben">&#8224;</dt>
+						<dd><xsl:apply-templates select="./todesdatum" /> <xsl:if test="./sterbeort != ''"> in <xsl:value-of select="./sterbeort" /></xsl:if></dd>
+					</xsl:if>
+				</dl>
+			</xsl:if>
+			<xsl:if test="./sonstiges != ''">
+				<p class="sonstiges"><xsl:value-of select="./sonstiges" /></p>
+			</xsl:if>
+		</div>
 	</xsl:template>
 	
 	<xsl:template name="editor">
 		<xsl:param name="personID" />
 		<a data-id="{$personID}" class="action edit" title="Bearbeiten"><span>Bearbeiten</span></a>
 		<a data-id="{$personID}" class="action del" title="Löschen"><span>Löschen</span></a>
-		<a data-id="{$personID}" class="action addParent" title="Elternteil hinzufügen"><span>Elternteil hinzufügen</span></a>
+		<!--<a data-id="{$personID}" class="action addParent" title="Elternteil hinzufügen"><span>Elternteil hinzufügen</span></a>-->
 		<a data-id="{$personID}" class="action addPartner" title="Partner hinzufügen"><span>Partner hinzufügen</span></a>
 		<a data-id="{$personID}" class="action addChild" title="Kind hinzufügen"><span>Kind hinzufügen</span></a>
 	</xsl:template>
@@ -204,6 +230,13 @@
 			</xsl:for-each>
 		</ul>
 
+	</xsl:template>
+	
+	<xsl:template match="geburtsdatum|todesdatum">
+		<xsl:variable name="year" select="substring(.,1,4)" />
+		<xsl:variable name="month" select="substring(.,6,2)" />
+		<xsl:variable name="day" select="substring(.,9,2)" />
+		<xsl:value-of select="$day" />.<xsl:value-of select="$month" />.<xsl:value-of select="$year" />
 	</xsl:template>
 	
 </xsl:stylesheet>
