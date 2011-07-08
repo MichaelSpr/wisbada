@@ -110,10 +110,10 @@ STAMMBAUM.view.disableForbiddenActions = function(elem) {
 	elem.find("li.paar > div > div > div .addPartner").remove();
 	
 	/* Remove "addParent"-button if person has already two parents */
-	/*...*/
-	
+	elem.find("li.paar > ul > li > div > div > div .addParent").remove();                
+
 	/* Remove "del"-button if person is not deletable */
-	/*...*/
+	elem.find("li:has(ul) > div > div > div .del").remove();
 }
 
 /**
