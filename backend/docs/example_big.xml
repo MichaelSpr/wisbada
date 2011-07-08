@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<familie xmlns="http://tempuri.org/stammbaum.xsd">
+<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" token="1" xsi:noNamespaceSchemaLocation="stammbaum.xsd">>
     <personen>
       <person id="1">
         <name>Müller</name>
