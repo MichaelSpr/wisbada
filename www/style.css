@@ -58,6 +58,8 @@ strong {
 
 /*common stuff */
 body {
+	font-family: "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size: 14px;
 	background: url(img/bg.jpg) top center no-repeat #66af24;
 }
 
@@ -78,6 +80,7 @@ body {
 	text-decoration: none;
 	color: #DDD;
 }
+
 /* the main board */
 #board {
 	background-color: #FFFFFF;
@@ -85,6 +88,7 @@ body {
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
 	overflow: hidden;
+	padding: 10px 10px 20px 10px;
 }
 
 /* menu styles */
@@ -135,12 +139,16 @@ body {
 	 position: relative;
 }
 
-.person {
+li.person {
+	float: left;
+}
+
+.paar > div > div.person {
 	float: left;
 	width: 150px;
 }
 
-.person > div {
+div.person > div {
 	padding: 5px;
 	margin: 0 5px;
 	height: 40px;
@@ -150,17 +158,36 @@ body {
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
 }
 
+div.person.male > div {
+	background: url(img/genders.png) -140px 5px no-repeat #FFF;
+}
+
+div.person.female > div {
+	background: url(img/genders.png) 0 5px no-repeat #FFF;
+}
+
+div.person img {
+	max-width: 40px;
+	max-height: 40px;
+	float: left;
+}
+
 .paar {
 	float: left;
 }
 
-.paar .wrap{
+li.person > .wrap {
+	width: 150px;
+	margin: 0 auto;
+}
+
+.paar > .wrap{
 	width: 300px;
 	margin: 0 auto;
 }
 		
 /* VERBINDUNGSLINIEN */
-.person:before {
+div.person:before {
 	display: block;
 	height: 15px;
 	padding: 0 5px 0 5px;
@@ -168,44 +195,44 @@ body {
 	content: " ";
 }
 
-ul ul > .person:before, ul ul > .paar > div > .person:before {
+ul ul > li > div > div.person.first:before {
+	background-position: -150px 0;
+}
+
+ul ul > li > div > div.person.last:before {
+	background-position: -300px 0;
+}
+
+ul ul > li > div > div.person.first.last:before {
+	background-position: -600px 0;
+}
+
+ul ul > li > div > div.person:before, ul ul > li.paar > div > div.person:before {
 	background-position: -450px 0;
 }
 
-ul ul > .paar > div > .person.noconnection:before {
+ul ul > li.paar > div > div.person.noconnection:before {
 	background-position: -750px 0;
 }
 
-ul ul > .paar.first > div > .person.first:before {
+ul ul > li.paar.first > div > div.person.first:before {
 	background-position: -150px 0;
 }
 
-ul ul > .paar.last > div > .person.first:before {
+ul ul > li.paar.last > div > div.person.first:before {
 	background-position: -300px 0;
 }
 
-ul ul > .paar.last.first > div > .person.first:before {
+ul ul > li.paar.last.first > div > div.person.first:before {
 	background-position: -150px 0;
 }
 
-ul ul > .paar.last > div > .person.last.noconnection:before {
+ul ul > li.paar.last > div > div.person.last.noconnection:before {
 	background-position: 0 0;
 }
 
-ul ul > .paar.last > div > .person.last:before {
+ul ul > li.paar.last > div > div.person.last:before {
 	background-position: -300px 0;
-}
-
-ul ul > .person.first:before {
-	background-position: -150px 0;
-}
-
-ul ul > .person.last:before {
-	background-position: -300px 0;
-}
-
-ul ul > .person.first.last:before {
-	background-position: -600px 0;
 }
 
 .paar.parent > div {
@@ -214,27 +241,95 @@ ul ul > .person.first.last:before {
 	background-position: -900px bottom;
 }
 
+li.person.parent > div {
+	padding-bottom: 15px;
+	background: url(img/sprite-v1.png) top left no-repeat transparent;
+	background-position: -600px 66px;
+}
+
 .line {
 	display: block;
 	height: 30px;
 	position: absolute;
+	top: 0;
 	background: url(img/hLine.png) top left repeat-x transparent;
 }
 
 /** Person activities */
-.person  > div { position: relative; }
-.person  > div .activity {
-	display: none;
+div.person  > div { position: relative; }
+div.person  a.action {
 	position: absolute;
-	top:-32px;
-	margin: 10px;
-	z-index: 1000;
+	display: none;
+	cursor: pointer;
 }
-.person > div:hover  .activity  a[data="edit"]{
-	left: -100px;
-}
-.person > div:hover  .activity{
+div.person > div:hover > a.action {
 	display: block;
+}
+
+div.person  a.action span {
+	display: block;
+	width: 32px;
+	height: 32px;
+	text-indent: -1000em;
+	background: url(img/icons.png) top left no-repeat transparent;
+	overflow: hidden;
+}
+
+div.person  a.addParent span, div.person  a.addPartner span, div.person  a.addChild span {
+	background-position: -32px 0;
+}
+
+div.person  a.edit span {
+	background-position: -64px 0;
+}
+
+div.person  a.del span {
+	background-position: -96px 0;
+}
+
+div.person  a.addParent {
+	left: 52px; top: -16px;
+}
+
+div.person  a.addPartner {
+	right: -16px; top: 8px;
+}
+
+div.person  a.addChild {
+	left: 52px; bottom: -16px;
+}
+
+div.person  a.edit {
+	left: -16px; bottom: -16px;
+}
+
+div.person  a.del {
+	left: -16px; bottom: 16px;
+}
+
+/** Buttons */
+.btn {
+    background: url("img/btn-overlay.png") repeat-x scroll left center #222;
+    display: inline-block;
+    padding: 5px 10px;
+	margin: 0 5px;
+    color: #FFF;
+    font-weight: bold;
+    border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.5); -moz-box-shadow: 0 0 3px rgba(0,0,0,0.5); -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #111;
+}
+
+.btn.primary {
+	background-color: #95bd09;
+}
+
+.btn.primary:hover {
+	background-color: #6cb026;
 }
 
 /** The modal dialog */
@@ -243,13 +338,22 @@ ul ul > .person.first.last:before {
 }
 
 #dialog-container {
-	background: url(img/bg.jpg) top center no-repeat #66af24;
-	border: 1px solid black;
+	background: #FFF;
+	background-color: rgba(255,255,255,0.98);
+	box-shadow: 0 0 20px rgba(0,0,0,0.8); -moz-box-shadow: 0 0 20px rgba(0,0,0,0.8); -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.8);
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;
 	padding: 8px;
 }
-#dialog-container  h1 {
-	font-size: 2em;
+#dialog-container  h3 {
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	color: #95bd09;
+}
+
+.buttons {
+	margin: 5px 0 0 0;
+	text-align: right;
 }
 
 .simplemodal-close {
@@ -265,6 +369,70 @@ ul ul > .person.first.last:before {
 	text-decoration: none;
 }
 
+/**
+ * Dialoge
+ */
+#dialog-container h4 {
+	font-weight: bold;
+	margin: 10px 0 4px 0;
+}
+
+/* Share */
+input.permalink {
+	width: 100%;
+	border: 1px solid #222;
+	margin: 5px 0;
+}
+
+ul.share li {
+	display: block;
+	margin: 0 5px 0 0;
+	float: left;
+}
+
+ul.share span {
+	display: block;
+	width: 32px;
+	height: 32px;
+	text-indent: -1000em;
+	background: url(img/socialmedia.png) top left no-repeat transparent;
+	overflow: hidden;
+}
+
+ul.share .facebook span {
+	background-position: -32px 0;
+}
+ul.share .twitter span {
+	background-position: -64px 0;
+}
+ul.share .xing span {
+	background-position: -96px 0;
+}
+ul.share .vz span {
+	background-position: -128px 0;
+}
+
+/* Editor */
+#inputcontainer table {
+	width: 100%;
+}
+
+#inputcontainer td {
+	padding-bottom: 5px;
+	vertical-align: top;
+	width: 28%;
+	padding-right: 2%;
+}
+
+#inputcontainer td.inputBezeichner {
+	width: 20%;
+	padding: 0;
+}
+
+#inputcontainer input, #inputcontainer select, #inputcontainer textarea {
+	width: 100%;
+}
+
 /* Clearfix */
 .clearfix:after {
 	content: ".";
@@ -273,14 +441,6 @@ ul ul > .person.first.last:before {
 	visibility: hidden;
 	line-height: 0;
 	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
 }
  
 * html .clearfix {

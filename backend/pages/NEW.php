@@ -16,6 +16,9 @@ if (0 == $count) {
 	$_SESSION['startat'] = 1;
     $this->Data->execQuery("INSERT INTO `stammbaum` (`name`) VALUES (\"" . $_SESSION["hash"] . "\");");
     $_SESSION["token"] = $this->Data->getLastInsertedId();
+	
+	$this->Data->execQuery("INSERT INTO personen VALUES (".$_SESSION["token"].",1,'Mustermann','Max','Musterstadt','1900-01-01','','1900-01-01',0,'','');");
+	
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim($_SERVER['PHP_SELF'], '/\\');
 	if ($this->getConfigValue("ModRewrite") && file_exists('../.htaccess') )

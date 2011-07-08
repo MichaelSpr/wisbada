@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="www/html.xsl" type="text/xsl"?>
+<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" token="1" xsi:noNamespaceSchemaLocation="backend/docs/stammbaum.xsd">
+    <personen>
+        <person id="1">
+            <name>Simpson</name>
+            <vorname>Homer Jay</vorname>
+            <geburtsort>Springfield</geburtsort>
+            <geburtsdatum>1989-12-17</geburtsdatum>
+            <sterbeort></sterbeort>
+            <todesdatum>1900-01-01</todesdatum>
+            <geschlecht>m</geschlecht>
+            <bild/>
+            <sonstiges/>
+        </person>
+        <person id="2">
+            <name>Simpson</name>
+            <vorname>Marjorie "Marge"</vorname>
+            <geburtsort>Springfield</geburtsort>
+            <geburtsdatum>1989-12-17</geburtsdatum>
+            <sterbeort></sterbeort>
+            <todesdatum>1900-01-01</todesdatum>
+            <geschlecht>w</geschlecht>
+            <bild/>
+            <sonstiges/>
+        </person>
+        <person id="3">
+            <name>Simpson</name>
+            <vorname>Bartholomew JoJo "Bart"</vorname>
+            <geburtsort>Springfield</geburtsort>
+            <geburtsdatum>1989-12-17</geburtsdatum>
+            <sterbeort></sterbeort>
+            <todesdatum>1900-01-01</todesdatum>
+            <geschlecht>m</geschlecht>
+            <bild/>
+            <sonstiges/>
+        </person>
+    </personen>
+    <beziehungen>
+        <partner id="1" partnerEins="1" partnerZwei="2"/>
+        <kind id="2" elternteil="1" kind="3"/>
+        <kind id="3" elternteil="2" kind="3"/>
+    </beziehungen>
+	<startat id="1" />
+</familie>
