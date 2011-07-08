@@ -1,4 +1,5 @@
 function getElementsByClassName(string) {
+	//noch nicht IE8
 	var elements = document.getElementById("begin").getElementsByTagName("*"); 
 	var elementArray = new Array();
 	for (var i = 0; i <  elements.length; i++) {
