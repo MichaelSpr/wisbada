@@ -5,15 +5,12 @@
    $result = 0;
  
    $target_path = $destination_path . basename( $_FILES['bild']['name']);
-	echo $target_path; 
+   $url = dirname($_SERVER["REQUEST_URI"]) . '/' . basename( $_FILES['bild']['name']);;
    if(@move_uploaded_file($_FILES['bild']['tmp_name'], $target_path)) {
       $result = 1;
    }
-	echo $result;
- 
-   sleep(1);
 ?>
 
 <script language="javascript" type="text/javascript">
-   window.top.window.stopUpload(<?php echo $result; ?>);
+   window.top.window.stopUpload(<?php echo $result; ?>, '<?php echo $url; ?>');
 </script>  
