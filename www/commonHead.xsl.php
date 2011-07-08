@@ -54,13 +54,15 @@
 								<a id="lnknew">neuer Stammbaum</a>
 							</li>
 							<li>
-								<a id="lnkviewsvg">Darstellung SVG</a>
-							</li>
-							<li>
-								<a id="lnkviewhtml">Darstellung HTML</a>
-							</li>
-							<li>
-								<a id="lnkexport">Export</a>
+								<a>Export</a>
+								<ul>
+								<li>
+									<a id="lnkviewsvg">SVG</a>
+								</li>
+								<li>
+									<a id="lnkexport">XML</a>
+								</li>
+								</ul>
 							</li>
 							<li>
 								<a id="lnkimport">Import</a>

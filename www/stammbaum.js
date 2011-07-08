@@ -223,11 +223,6 @@ STAMMBAUM.events.onLinkSVG = function() {
 	window.open(loc);
 }
 
-STAMMBAUM.events.onLinkHTML = function() {
-	// TODO: Fix this. We need to determin the location somehow different
-	document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=html').replace(/&*$/g,'');
-}
-
 STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
 		{ page: "GET", outputStyle: 'xml' },
@@ -433,7 +428,6 @@ STAMMBAUM.events.onPersonHoverOut = function() {
 STAMMBAUM.events.hookEvents = function() {
 	$('#lnknew').click( STAMMBAUM.events.onLinkNew );
 	$('#lnkviewsvg').click( STAMMBAUM.events.onLinkSVG );
-	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
 	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
