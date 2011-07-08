@@ -39,7 +39,13 @@ if (!empty($tokenid)){
 				$xmlString.="<geburtsort>" . $row->geburtsort . "</geburtsort>";
 				$xmlString.="<geburtsdatum>" . $row->geburtsdatum . "</geburtsdatum>";
 				$xmlString.="<sterbeort>" . $row->sterbeort . "</sterbeort>";
-				$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				
+				if($row->todesdatum == null || $row->todesdatum == "" || $row->todesdatum == "0000-00-00"){
+					$xmlString.="<todesdatum xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>";
+				}else{
+					$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				}
+				
 				if (1 == $row->geschlecht)
 					$xmlString.="<geschlecht>w</geschlecht>";
 				else
@@ -65,7 +71,12 @@ if (!empty($tokenid)){
 				$xmlString.="<geburtsort>" . $row->geburtsort . "</geburtsort>";
 				$xmlString.="<geburtsdatum>" . $row->geburtsdatum . "</geburtsdatum>";
 				$xmlString.="<sterbeort>" . $row->sterbeort . "</sterbeort>";
-				$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				if($row->todesdatum == null || $row->todesdatum == "" || $row->todesdatum == "0000-00-00"){
+					$xmlString.="<todesdatum xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/>";
+				}else{
+					$xmlString.="<todesdatum>" . $row->todesdatum . "</todesdatum>";
+				}
+				
 				if (1 == $row->geschlecht)
 					$xmlString.="<geschlecht>w</geschlecht>";
 				else
