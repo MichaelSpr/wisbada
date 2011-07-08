@@ -51,6 +51,11 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+		  <xs:element name="startat" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:positiveInteger"/>
+                    </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="token" type="xs:positiveInteger"></xs:attribute>
       </xs:complexType>
