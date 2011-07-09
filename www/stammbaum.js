@@ -15,10 +15,18 @@ STAMMBAUM.config = {};
 STAMMBAUM.view.width = 150;
 STAMMBAUM.view.init = function(elem) {
 
+	STAMMBAUM.params.get = STAMMBAUM.helper.parseURL(window.location.search);
 	STAMMBAUM.params.startId = parseInt(elem.attr('data-id'));
 	STAMMBAUM.params.lastPersonId = parseInt(elem.attr('data-lastpersonid'));
 	STAMMBAUM.params.lastBeziehungsId = parseInt((elem.attr('data-lastbeziehungsid') == '')?'0':elem.attr('data-lastbeziehungsid'))+1;
-	STAMMBAUM.params.shorturl = document.location.href;
+	
+	if(STAMMBAUM.params.get.token) {
+		var shorturl = document.location.href.replace(document.location.search, "");
+		shorturl += "?token=" + STAMMBAUM.params.get.token;
+		STAMMBAUM.params.shorturl = shorturl;
+	} else {
+		STAMMBAUM.params.shorturl = document.location.href;
+	}
 	
 	STAMMBAUM.events.hookEvents();
 	
@@ -141,14 +149,27 @@ STAMMBAUM.helper.log = function(msg) {
 
 STAMMBAUM.helper.toXML = function (xml) {
 	var str = "";
-    if (window.XMLSerializer) {
+    if (xml.xml) {
+        str = xml.xml;
+    } else if (window.XMLSerializer) {
 		try {
 			str = (new window.XMLSerializer()).serializeToString(xml);
 		} catch(e) {}
-    } else if (xml.xml) {
-        str = xml.xml;
     }
     return str;
+}
+
+STAMMBAUM.helper.parseURL = function(queryStr) {
+	var a = queryStr.substr(1).split('&');
+	if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=');
+        if (p.length != 2) continue;
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
 }
 
 /**
