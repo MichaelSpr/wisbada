@@ -140,14 +140,15 @@ STAMMBAUM.helper.log = function(msg) {
 }
 
 STAMMBAUM.helper.toXML = function (xml) {
+	var str = "";
     if (window.XMLSerializer) {
 		try {
-			return (new window.XMLSerializer()).serializeToString(xml);
+			str = (new window.XMLSerializer()).serializeToString(xml);
 		} catch(e) {}
     } else if (xml.xml) {
-        return xml.xml;
+        str = xml.xml;
     }
-    return "";
+    return str;
 }
 
 /**
