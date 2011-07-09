@@ -139,6 +139,17 @@ STAMMBAUM.helper.log = function(msg) {
 	if ( typeof console == 'object' ) { console.log ( msg ); }
 }
 
+STAMMBAUM.helper.toXML = function (xml) {
+    if (window.XMLSerializer) {
+		try {
+			return (new window.XMLSerializer()).serializeToString(xml);
+		} catch(e) {}
+    } else if (xml.xml) {
+        return xml.xml;
+    }
+    return "";
+}
+
 /**
 * Configuration
 */
@@ -232,8 +243,7 @@ STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
 		{ page: "GET", outputStyle: 'xml' },
 		function(result) {
-			var serializer = new XMLSerializer();
-			var xml = serializer.serializeToString(result.documentElement);
+			var xml = STAMMBAUM.helper.toXML(result.documentElement);
 			STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xml +'</textarea>', { 'title': 'Export', 'buttons': [{'title': 'Abbrechen'}] } );
 				
 		}
