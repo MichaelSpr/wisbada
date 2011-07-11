@@ -291,9 +291,7 @@
       <kind id="4" elternteil="1" kind="4"/>
       <kind id="5" elternteil="2" kind="4"/>
       <kind id="7" elternteil="3" kind="6"/>
-      <kind id="8" elternteil="3" kind="6"/>
       <kind id="9" elternteil="5" kind="7"/>
-      <kind id="10" elternteil="5" kind="7"/>
       <kind id="12" elternteil="6" kind="9"/>
       <kind id="13" elternteil="8" kind="9"/>
       <kind id="15" elternteil="9" kind="11"/>
