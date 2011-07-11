@@ -5,6 +5,8 @@ function getElementsByClassName(string) {
 		var thisElem = elements[i];
 		if (thisElem.classList && thisElem.classList.toString() == string) {
 			elementArray[elementArray.length] = thisElem;
+		} else if (thisElem.className && thisElem.className.toString() == string) {
+			elementArray[elementArray.length] = thisElem;
 		}
 	}
 	return elementArray;
@@ -18,6 +20,10 @@ function getMaxLevel() {
 		var thisElem = elements[i];
 		if (thisElem.classList && thisElem.classList.toString().match(/level_.*/)) {
 			var value = parseInt(thisElem.classList.toString().match(/level_(.*)/)[1]);
+			if( maxLevel < value)
+				maxLevel = value;
+		} else if (thisElem.className && thisElem.className.toString().match(/level_.*/)) {
+			var value = parseInt(thisElem.className.toString().match(/level_(.*)/)[1]);
 			if( maxLevel < value)
 				maxLevel = value;
 		}
