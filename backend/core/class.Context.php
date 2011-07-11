@@ -59,18 +59,19 @@ class Context {
 		if (!isset($_SESSION["token"])){
 			if (false == $this->Data->isConnected())
 				$this->Data->connect();
-			$hash = isset($_SESSION['hash'])?$_SESSION['hash']:$_REQUEST['token'];
 			
-			   $a = $this->Data->execQuery("SELECT * FROM stammbaum WHERE name = '" . $hash . "' LIMIT 1");
+			$hash = isset($_SESSION['hash'])?$_SESSION['hash']:isset($_REQUEST['token'])?$_REQUEST['token']:0;
+			if($hash != 0){
+			    $a = $this->Data->execQuery("SELECT * FROM stammbaum WHERE name = '" . $hash . "' LIMIT 1");
 				$row = mysql_fetch_object($a);
-			if($row){
-				$_SESSION["token"] = $row->id;
-				$_SESSION["startat"] = isset($_REQUEST['startat'])?$_REQUEST['startat']:1;
-				$_SESSION["hash"] = $hash;
-				return $row->id;
-			}else{
-				return "";
+				if($row){
+					$_SESSION["token"] = $row->id;
+					$_SESSION["startat"] = isset($_REQUEST['startat'])?$_REQUEST['startat']:1;
+					$_SESSION["hash"] = $hash;
+					return $row->id;
+				}
 			}
+			return "";
 		}else{
 			return $_SESSION["token"];
 		}

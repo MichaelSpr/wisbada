@@ -15,10 +15,18 @@ STAMMBAUM.config = {};
 STAMMBAUM.view.width = 150;
 STAMMBAUM.view.init = function(elem) {
 
+	STAMMBAUM.params.get = STAMMBAUM.helper.parseURL(window.location.search);
 	STAMMBAUM.params.startId = parseInt(elem.attr('data-id'));
 	STAMMBAUM.params.lastPersonId = parseInt(elem.attr('data-lastpersonid'));
 	STAMMBAUM.params.lastBeziehungsId = parseInt((elem.attr('data-lastbeziehungsid') == '')?'0':elem.attr('data-lastbeziehungsid'))+1;
-	STAMMBAUM.params.shorturl = document.location.href;
+	
+	if(STAMMBAUM.params.get.token) {
+		var shorturl = document.location.href.replace(document.location.search, "");
+		shorturl += "?token=" + STAMMBAUM.params.get.token;
+		STAMMBAUM.params.shorturl = shorturl;
+	} else {
+		STAMMBAUM.params.shorturl = document.location.href;
+	}
 	
 	STAMMBAUM.events.hookEvents();
 	
@@ -36,9 +44,11 @@ STAMMBAUM.view.loadHTML = function(elem) {
 	STAMMBAUM.view.fillLines(main_ul);
 	STAMMBAUM.view.disableForbiddenActions(main_ul);
 	
+	jQuery("div.person").hover(STAMMBAUM.events.onPersonHoverIn, STAMMBAUM.events.onPersonHoverOut);
+	
 	var scale = STAMMBAUM.helper.round(elem.width()/(main_ul.width()), 3);
 	if(scale < 1) { //no upscaling
-		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
+		main_ul.css("-moz-transform", "scale(" + scale + ")").css("-webkit-transform", "scale(" + scale + ")").css("-o-transform", "scale(" + scale + ")").css("transform", "scale(" + scale + ")").css("msTransform", "scale(" + scale + ")");
 		main_ul.css("margin-left", "-" + ((1-scale)/2*main_ul.width()) + "px"); //nach links verschieben
 	}
 }
@@ -114,6 +124,9 @@ STAMMBAUM.view.disableForbiddenActions = function(elem) {
 
 	/* Remove "del"-button if person is not deletable */
 	elem.find("li:has(ul) > div > div > div .del").remove();
+	
+	/* Remove the "del"-button for the root person */
+	elem.find('.person[data-id="'+STAMMBAUM.params.startId+'"] > div > .del').remove();
 }
 
 /**
@@ -132,6 +145,31 @@ STAMMBAUM.helper.round = function(number, precision) {
 
 STAMMBAUM.helper.log = function(msg) {
 	if ( typeof console == 'object' ) { console.log ( msg ); }
+}
+
+STAMMBAUM.helper.toXML = function (xml) {
+	var str = "";
+    if (xml.xml) {
+        str = xml.xml;
+    } else if (window.XMLSerializer) {
+		try {
+			str = (new window.XMLSerializer()).serializeToString(xml);
+		} catch(e) {}
+    }
+    return str;
+}
+
+STAMMBAUM.helper.parseURL = function(queryStr) {
+	var a = queryStr.substr(1).split('&');
+	if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=');
+        if (p.length != 2) continue;
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
 }
 
 /**
@@ -175,11 +213,21 @@ STAMMBAUM.view.dialog = function(data, options) {
 			if(opts.buttons.length > 0) {
 				var btns = jQuery("<div class=\"buttons\"></div>");
 				for(var i=0; i<opts.buttons.length; i++) {
-					var btn = jQuery.extend({ 'title': '', 'primary': false, 'close': true, 'callback': null }, opts.buttons[i]);
+					var btn = jQuery.extend({ 'title': '', 'primary': false, 'close': true, 'callback': null, 'align': 'right' }, opts.buttons[i]);
 					var tmp = jQuery("<a class=\"btn\">" + btn.title + "</a>");
 					
 					if(btn.primary) tmp.addClass("primary");
-					tmp.click( (function(btn) { return function() { if(btn.close) { jQuery.modal.close(); } if(btn.callback != null) { btn.callback(dialog); } return false; } } )(btn) );
+					if(btn.align != 'right') tmp.css('float',btn.align);
+					tmp.click( (function(btn) { 
+						return function() { 
+							if(btn.callback != null) {
+								btn.close = btn.callback(dialog); 
+							}
+							if(btn.close) { jQuery.modal.close(); } 
+							return false; 
+						} 
+					} )(btn) );
+						
 
 					btns.append(tmp);
 				}
@@ -194,6 +242,11 @@ STAMMBAUM.view.dialog = function(data, options) {
 	
 }
 
+STAMMBAUM.view.ajaxDialog = function(url, options) {
+	var cnt = jQuery("<div></div>").load(url, function() { STAMMBAUM.view.dialog(cnt, options); });
+	return false;
+}
+
 STAMMBAUM.events.onLinkNew = function() {
 	// TODO: Fix this. We need to determin the location somehow different
 	document.location = (document.location.pathname)
@@ -201,10 +254,12 @@ STAMMBAUM.events.onLinkNew = function() {
 
 STAMMBAUM.events.onLinkSVG = function() {
 	// TODO: Fix this. We need to determin the location somehow different
+	var loc = "";
 	if (document.location.href.match(/outputStyle/))
-		document.location = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
+		loc = document.location.href.replace( /outputStyle=(svg|html)/g , 'outputStyle=svg').replace(/&*$/g,'');
 	else
-		document.location = document.location.href + '&outputStyle=svg';
+		loc = document.location.href + '&outputStyle=svg';
+	window.open(loc);
 }
 
 STAMMBAUM.events.onLinkHTML = function() {
@@ -216,8 +271,7 @@ STAMMBAUM.events.onLinkExport = function() {
 	$.post("../index.php", 
 		{ page: "GET", outputStyle: 'xml' },
 		function(result) {
-			var serializer = new XMLSerializer();
-			var xml = serializer.serializeToString(result.documentElement);
+			var xml = STAMMBAUM.helper.toXML(result.documentElement);
 			STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xml +'</textarea>', { 'title': 'Export', 'buttons': [{'title': 'Abbrechen'}] } );
 				
 		}
@@ -226,14 +280,23 @@ STAMMBAUM.events.onLinkExport = function() {
 }
 
 STAMMBAUM.events.onLinkImport = function() {
-
-	// Debug data; To be removed...
-	var xmlData = '<familie token="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="1"><name>Müller</name><vorname>Heinrich</vorname><geburtsort>Hamburg</geburtsort><geburtsdatum>1870-12-17</geburtsdatum><sterbeort>München</sterbeort><todesdatum>1950-07-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="2"><name>Müller</name><vorname>Bertada</vorname><geburtsort>Hamburg</geburtsort><geburtsdatum>1872-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1955-08-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="3"><name>Müller</name><vorname>Henry</vorname><geburtsort>Dortmund</geburtsort><geburtsdatum>1893-12-17</geburtsdatum><sterbeort>Paris</sterbeort><todesdatum>1990-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="4"><name>Mandorf</name><vorname>Agnes</vorname><geburtsort>Dortmund</geburtsort><geburtsdatum>1897-12-17</geburtsdatum><sterbeort>Dortmund</sterbeort><todesdatum>2000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="5"><name>Müller</name><vorname>Gerda</vorname><geburtsort>Köln</geburtsort><geburtsdatum>1895-12-17</geburtsdatum><sterbeort>Paris</sterbeort><todesdatum>2000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="6"><name>Müller</name><vorname>Kurt</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1910-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>1990-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="7"><name>Müller</name><vorname>Heinrich</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1913-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1942-05-05</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges>Im Krieg gefallen</sonstiges></person><person id="8"><name>Müller</name><vorname>Anna</vorname><geburtsort>Gießen</geburtsort><geburtsdatum>1912-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>1992-05-05</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="9"><name>Müller</name><vorname>Johann</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1942-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>2008-05-05</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="10"><name>Müller</name><vorname>Johanna</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1945-12-17</geburtsdatum><sterbeort>Frankfurt</sterbeort><todesdatum>2008-05-05</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="11"><name>Müller</name><vorname>Charles</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1970-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="12"><name>Müller</name><vorname>Mathias</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1972-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="13"><name>Müller</name><vorname>Theodor</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1975-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="14"><name>Müller</name><vorname>Phillipp</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1978-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="15"><name>Müller</name><vorname>Charlotta</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="16"><name>Müller</name><vorname>Thorsten</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1993-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="17"><name>Müller</name><vorname>Tim</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1995-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="18"><name>Müller</name><vorname>Jan</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1998-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="19"><name>Böhmen</name><vorname>Gertrud</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1945-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="20"><name>Böhmen</name><vorname>Wilhelm</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1943-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="21"><name>Schwarz</name><vorname>Gisa</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1973-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="22"><name>Schwarz</name><vorname>Thorsten</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="24"><name>Habsburg</name><vorname>Lisa</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1975-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>w</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="25"><name>Habsburg</name><vorname>Reiner</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person><person id="23"><name>Habsburg</name><vorname>Peter</vorname><geburtsort>Frankfurt</geburtsort><geburtsdatum>1971-12-17</geburtsdatum><sterbeort></sterbeort><todesdatum>1000-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen><partner id="1" partnerEins="1" partnerZwei="2"></partner><partner id="6" partnerEins="3" partnerZwei="5"></partner><partner id="11" partnerEins="6" partnerZwei="8"></partner><partner id="14" partnerEins="9" partnerZwei="10"></partner><partner id="23" partnerEins="11" partnerZwei="15"></partner><partner id="32" partnerEins="19" partnerZwei="20"></partner><partner id="35" partnerEins="21" partnerZwei="22"></partner><partner id="40" partnerEins="24" partnerZwei="25"></partner><kind id="2" elternteil="1" kind="3"></kind><kind id="3" elternteil="2" kind="3"></kind><kind id="4" elternteil="1" kind="4"></kind><kind id="5" elternteil="2" kind="4"></kind><kind id="7" elternteil="3" kind="6"></kind><kind id="9" elternteil="5" kind="7"></kind><kind id="12" elternteil="6" kind="9"></kind><kind id="13" elternteil="8" kind="9"></kind><kind id="15" elternteil="9" kind="11"></kind><kind id="16" elternteil="9" kind="12"></kind><kind id="17" elternteil="9" kind="13"></kind><kind id="18" elternteil="9" kind="14"></kind><kind id="19" elternteil="10" kind="11"></kind><kind id="20" elternteil="10" kind="12"></kind><kind id="21" elternteil="10" kind="13"></kind><kind id="22" elternteil="10" kind="14"></kind><kind id="24" elternteil="11" kind="18"></kind><kind id="25" elternteil="11" kind="17"></kind><kind id="26" elternteil="11" kind="16"></kind><kind id="27" elternteil="15" kind="16"></kind><kind id="28" elternteil="15" kind="17"></kind><kind id="29" elternteil="15" kind="18"></kind><kind id="30" elternteil="6" kind="19"></kind><kind id="31" elternteil="8" kind="19"></kind><kind id="33" elternteil="19" kind="21"></kind><kind id="34" elternteil="20" kind="21"></kind><kind id="36" elternteil="21" kind="23"></kind><kind id="37" elternteil="22" kind="23"></kind><kind id="38" elternteil="19" kind="24"></kind><kind id="39" elternteil="20" kind="24"></kind></beziehungen></familie>';
-		
-	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xmlData +'</textarea>',
+	
+	var tHeight;
+	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;"></textarea><p id="errormsg" style="color:#FF0000;display:hidden;">&nbsp;</p>',
 						{'title': "Import",
 						 'buttons': [
 							{'title': 'Abbrechen'},
+							{'title': 'Beispiel',
+								'align' : 'left',
+								'callback': function(dlg) {
+									$.ajax( { url: "../backend/docs/example_big.xml",
+										dataType : 'text',
+										success: function(result) {
+											dlg.data.find('textarea').val(result);
+										}
+									});
+								}
+							},
 							{'title': 'Importieren',
 							 'primary': true,
 							 'callback': function(dialog) {
@@ -245,9 +308,15 @@ STAMMBAUM.events.onLinkImport = function() {
 											STAMMBAUM.events.loadWithRootPerson();
 										}
 										else
-										{
-											STAMMBAUM.helper.log('IMPORT: failed\n' + result);
-											STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Importvorgang!'});
+										{	
+											var s = $('#simplemodal-data');
+											t = dialog.data.find('textarea');
+											var p = dialog.data.find('p');
+											var b = dialog.data.find('.buttons');
+											var h = dialog.data.find('h3')
+											if (tHeight==null) tHeight = t.height() + p.height();
+											p.html(result).show();
+											t.height( (tHeight - p.outerHeight()) );
 										}
 									}
 								);
@@ -275,6 +344,14 @@ STAMMBAUM.events.onLinkShare = function() {
 	}
 	
 	STAMMBAUM.view.dialog(shareDialog, {'title': 'Verteilen' });
+}
+
+STAMMBAUM.events.onLinkQuickstart = function() {
+	return STAMMBAUM.view.ajaxDialog("static/quickstart.html", {'title': 'Anleitung' });
+}
+
+STAMMBAUM.events.onLinkImpressum = function() {
+	return STAMMBAUM.view.ajaxDialog("static/impressum.html", {'title': 'Impressum' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
@@ -356,7 +433,7 @@ STAMMBAUM.events.onAddPerson = function(personId, where) {
 	if (relationship == null)
 		return false;
 		
-	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum>1900-01-01</todesdatum><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
+	preparedXML = '<familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://dh.ramon-roessler.de/ProjektStammbaum/3_Entwicklung/Datenverwaltung/docs/stammbaum.xsd"><personen><person id="'+newId+ '"><name>Mustermann</name><vorname>Max</vorname><geburtsort></geburtsort><geburtsdatum>1900-01-01</geburtsdatum><sterbeort> </sterbeort><todesdatum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/><geschlecht>m</geschlecht><bild></bild><sonstiges></sonstiges></person></personen><beziehungen>'+relationship+'</beziehungen></familie>';
 	
 	$.post("../index.php", 
 		{ page: "SET", xml: preparedXML },
@@ -396,6 +473,18 @@ STAMMBAUM.events.loadWithRootPerson = function(personId) {
 	return false;
 }
 
+STAMMBAUM.events.onPersonHoverIn = function() {
+	var $detailbox = jQuery("div.detailbox");
+	var $elem = jQuery(this);
+	$detailbox.html($elem.find(".details").html());
+	$detailbox.show();
+}
+
+STAMMBAUM.events.onPersonHoverOut = function() {
+	var $detailbox = jQuery("div.detailbox");
+	$detailbox.hide();
+	$detailbox.html("");
+}
 
 // hook the events
 STAMMBAUM.events.hookEvents = function() {
@@ -404,7 +493,9 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkviewhtml').click( STAMMBAUM.events.onLinkHTML );
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
-	$('#lnkshare, #lnkperma').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
+	$('#lnkquickstart').click( function() { return STAMMBAUM.events.onLinkQuickstart(); } );
+	$('#lnkimpressum').click( function() { return STAMMBAUM.events.onLinkImpressum(); } );
 	
 	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); return false; } );
 	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); return false; } );

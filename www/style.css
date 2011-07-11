@@ -172,6 +172,10 @@ div.person img {
 	float: left;
 }
 
+div.person .details {
+	display: none;
+}
+
 .paar {
 	float: left;
 }
@@ -185,7 +189,7 @@ li.person > .wrap {
 	width: 300px;
 	margin: 0 auto;
 }
-		
+
 /* VERBINDUNGSLINIEN */
 div.person:before {
 	display: block;
@@ -305,6 +309,51 @@ div.person  a.edit {
 
 div.person  a.del {
 	left: -16px; bottom: 16px;
+}
+
+/* Detail-Box */
+div.detailbox {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	
+	background-color: #FFFFFF;
+	background-color: rgba(255,255,255,0.9);
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;	
+	box-shadow: 0 0 2px 2px rgba(0,0,0, 0.2);
+	padding: 10px 10px 20px 10px;
+	
+	width: 250px;
+	min-height: 80px;
+	
+	display: none;
+}
+
+div.detailbox h3 {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+div.detailbox dt {
+	float: left;
+	margin: 0 5px 0 0;
+	padding: 2px;
+}
+
+div.detailbox dd {
+	padding: 2px;
+}
+
+div.detailbox img {
+	max-width: 80px;
+	max-height: 80px;
+	float: left;
+}
+
+div.detailbox p.sonstiges {
+	font-size: 0.9em;
+	font-style: italic;
+	margin-top: 10px;
 }
 
 /** Buttons */

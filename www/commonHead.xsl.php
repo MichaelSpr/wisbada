@@ -66,10 +66,10 @@
 								<a id="lnkimport">Import</a>
 							</li>
 							<li>
-								<a id="lnkperma">Permalink</a>
+								<a id="lnkshare">Verteilen</a>
 							</li>
 							<li>
-								<a id="lnkshare">Verteilen</a>
+								<a id="lnkquickstart">Anleitung</a>
 							</li>
 						</ul>
 					</div>
@@ -94,6 +94,9 @@
 							<xsl:value-of select="$startId" />
 						</xsl:attribute>
 						<xsl:call-template name="stammbaum" />
+					</div>
+					<div id="copyleft">
+						<a href="static/impressum.html" id="lnkimpressum">Impressum</a>
 					</div>
 				</div>
 			</body>

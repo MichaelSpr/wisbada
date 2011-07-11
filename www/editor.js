@@ -1,4 +1,6 @@
 
+var person;
+
 STAMMBAUM.events.onEditPerson = function ( pid )
 {
     $.get('../index.php', {page: 'GET', pid : pid }, 
@@ -6,37 +8,35 @@ STAMMBAUM.events.onEditPerson = function ( pid )
 			person = splitXML(data.documentElement);
 			var geburt = 'geburtsdatum';
 			var todes = 'todesdatum';
+			person.pid = pid;
 	
-			STAMMBAUM.view.dialog('<div id="inputcontainer"><form method="post" action="./backend/core/upload.php" enctype="multipart/form-data"'+
-				'id="inputForm"  target="upload_target" onsubmit="return chkForm()">' +
+			dialog = STAMMBAUM.view.dialog('<div id="inputcontainer"><form method="post" action="../backend/core/upload.php" enctype="multipart/form-data"'+
+				'id="inputForm"  target="upload_target">' +
 				'<table border="0" cell-padding="0" cell-spacing="0"><tr>' +
-				'<td class="inputBezeichner"><label for="name">Name</label></td><td><input type="text" name="name" id="name" value="'+person.name+'"/></td>' +
+				'<td class="inputBezeichner"><label for="name">Name</label></td><td><input type="nachname" name="name" id="nachname" value="'+person.name+'"/></td>' +
 				'<td class="inputBezeichner"><label for="vorname">Vorname</label></td><td><input type="text" name="vorname" id="vorname" value="'+person.vorname+'" /></td>' +
 				'</tr><tr><td class="inputBezeichner"><label for="geschlecht">Geschlecht</label></td><td><select name="geschlecht" id="geschlecht" size="1">'+
-					'<option value="m" '+ ((person.geschlecht=='m')?'selected':'') +'>M&auml;nnlich</option>'+
+					'<option value="m" '+ ((person.geschlecht=='m')?'selected':'') +'>Männlich</option>'+
 					'<option value="w" '+ ((person.geschlecht=='w')?'selected':'') +'>Weiblich</option></select>' +
 				'</td><td class="inputBezeichner"></td><td></td>' +
 						'	</tr>' +
 						'	<tr>' +
-						'		<td class="inputBezeichner">Geburtsdatum</td><td><input type="text" name="geburtsdatum" id="geburtsdatum"  value="'+person.geburtsdatum+'" /></td>' + //onblur="PruefeDatum("geburtsdatum");"
+						'		<td class="inputBezeichner">Geburtsdatum</td><td><input type="text" name="geburtsdatum" id="geburtsdatum"  value="'+person.geburtsdatum+'" /></td>' +
 						'		<td class="inputBezeichner">Geburtsort</td><td><input type="text" name="geburtsort" id="geburtsort" value="'+person.geburtsort+'" /></td>' +
 						'	</tr>' +
-						'	<tr>' +
-						'		<td class="inputBezeichner"><label for="todesdatum">Todesdatum</label></td><td><input type="text" name="todesdatum" id="todesdatum"  value="'+person.todesdatum+'" /></td>' + //onblur="PruefeDatum("todesdatum")"
-						'		<td class="inputBezeichner"><label for="sterbeort">Sterbeort</label></td><td><input type="text" name="sterbeort" id="sterbeort" value="'+person.sterbeort+'" /></td>'+
-						'	</tr>' +
-						'	<tr>' +
-						'		<td class="inputBezeichner"><label for="sonstiges">Sonstiges</label></td><td colspan="3"><textarea rows="2" cols="" id="sonstiges">'+person.sonstiges+'" </textarea></td>' +
+				'<tr><td class="inputBezeichner"><label for="todesdatum">Todesdatum</label></td>' +
+					'<td><input type="text" name="todesdatum" id="todesdatum" value="'+person.todesdatum+'" /></td>' + 
+				'<td class="inputBezeichner"><label for="sterbeort">Sterbeort</label></td>'+
+					'<td><input type="text" name="sterbeort" id="sterbeort" value="'+person.sterbeort+'" /></td>'+
+				'</tr><tr><td class="inputBezeichner"><label for="sonstiges">Sonstiges</label></td>'+
+					'<td colspan="3"><textarea rows="2" cols="" id="sonstiges">'+person.sonstiges+'</textarea></td>' +
 						'	</tr>' +
 						'	<tr>' +
 						'		<td class="inputBezeichner">Bild</td><td colspan="3"><input type="file" name="bild" id="bild"/>' +
 						'		<br/>' +
-						'		<span  id="result"></span>' +
+						'		<span id="result"></span>' +
 						'		<iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>' +
 						'		</td>' +
-						'	</tr>' +
-						'	<tr>' +
-						'		<td colspan="4" class="inputSenden"><input type="submit" name="senden" value="senden" id="button" /></td>' +
 						'	</tr>' +
 						'</table>' +
 					'</form>' +
@@ -46,22 +46,16 @@ STAMMBAUM.events.onEditPerson = function ( pid )
 						{'title' : 'senden', 
 						'primary' : true,
 						'callback' : function(dlg){
-							// commit
-							var xmlstring = '<?xml version="1.0" encoding="UTF-8" ?><familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="stammbaum.xsd"><personen><person id="'+pid+'"><name>' + document.getElementById("name").value +  '</name><vorname>' + document.getElementById('vorname').value + '</vorname><geburtsort>' + document.getElementById('geburtsort').value + '</geburtsort><geburtsdatum>' + document.getElementById('geburtsdatum').value + '</geburtsdatum><sterbeort>' + document.getElementById('sterbeort').value + '</sterbeort><todesdatum>' + document.getElementById('todesdatum').value + '</todesdatum><geschlecht>' + document.getElementById('geschlecht').value + '</geschlecht><bild/><sonstiges/></person></personen><beziehungen></beziehungen></familie>';
-							$.post("../index.php",
-								{ page: "SET", token: STAMMBAUM.token, xml: xmlstring },
-								function(result) {
-									if (result == 1)
-									{
-										console.log('IMPORT: success');
-										location.reload();
-									}
-									else
-									{
-										console.log('IMPORT: failed\n' + result);
-										STAMMBAUM.dialog( '<div><h1>Importfailed!</h1><p>'+result+'</p></div>');
-									}
-								});
+							if ($('#bild').val() != '' )
+							{
+								$('#inputForm').submit();
+								return false;	
+							}
+							else
+							{
+								commitData();
+								return true;
+							}
 						}
 					} ]
 				}
@@ -85,7 +79,6 @@ function splitXML(xmlDoc) {
 		'sonstiges'	:	(pers.getElementsByTagName('sonstiges').length>0)?pers.getElementsByTagName('sonstiges')[0].textContent:'',
 		'bild'	:	(pers.getElementsByTagName('bild').length>0)?pers.getElementsByTagName('bild')[0].textContent:''
 	};
-	console.log(person);
 	return person;		
 }
 
@@ -97,39 +90,65 @@ function startUpload(){
       return true;
 }
 
-function stopUpload(success){
-	if (success == 1){
-	         document.getElementById("result").innerHTML = "The file was uploaded successfully!";
-			//$("result").html("The file was uploaded successfully!");
+function stopUpload(success, imgUrl){
+	if (success == '1'){
+		document.getElementById("result").innerHTML = "The file was uploaded successfully! ";
+		commitData(imgUrl);
 	}
 	else {
 		document.getElementById("result").innerHTML = "There was an error during file upload!";
-		//$("result").html("There was an error during file upload!");
 	}
 	return true;   
 }
 
+function commitData(imgUrl) {
+	pid = person.pid;	
+	var xmlstring = '<?xml version="1.0" encoding="UTF-8" ?><familie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="stammbaum.xsd"><personen><person id="'+pid+'"><name>' + document.getElementById("nachname").value +  '</name><vorname>' + document.getElementById('vorname').value + '</vorname><geburtsort>' + document.getElementById('geburtsort').value + '</geburtsort><geburtsdatum>' + document.getElementById('geburtsdatum').value + '</geburtsdatum><sterbeort>' + document.getElementById('sterbeort').value + '</sterbeort>';
+	if((document.getElementById('todesdatum').value ==''))
+	{
+		xmlstring = xmlstring+ '<todesdatum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>';
+	}
+	else
+	{
+		xmlstring = xmlstring + '<todesdatum>' + document.getElementById('todesdatum').value + '</todesdatum>';
+	}
+	xmlstring = xmlstring + '<geschlecht>' + document.getElementById('geschlecht').value + '</geschlecht><bild>'+((imgUrl==null)?person.bild:imgUrl)+'</bild><sonstiges>'+
+	'<![CDATA['+document.getElementById('sonstiges').value +']]></sonstiges>'+
+	'</person></personen><beziehungen></beziehungen></familie>';
+
+	$.post("../index.php",
+		{ page: "SET", token: STAMMBAUM.token, xml: xmlstring },
+		function(result) {
+			if (result == 1)
+			{
+				location.reload();
+			}
+			else
+			{
+				STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Speichern!'});
+			}
+		}
+	);
+}
+
 
 //<!--  ################# Validierung ###################### -->
-    function chkForm () {
-      if (document.inputForm.name.value == "") {
-	  //if ($('#name').val() == "") {
+ function chkForm () {
+	var form = $('#inputForm');
+      if (form.nachname.value == "") {
         alert("Bitte Ihren Namen eingeben!");
-        document.inputForm.name.focus();
-		//$('#name').get().focus();
+        form.nachname.focus();
         return false;
       }
-        if (document.inputForm.vorname.value == "") {
-	  // if ($('#vorname').val() == "") {
+        if (form.vorname.value == "") {
         alert("Bitte Ihren Vornamen eingeben!");
-        document.inputForm.vorname.focus();
-		//$('#vorname').get().focus();
+        form.vorname.focus();
         return false;
       }
     }
       
-    //  <!-- http://www.web-toolbox.net/webtoolbox/datum/datum-gueltig.htm -->
-      function PruefeDatum(datumFeld)
+//  <!-- http://www.web-toolbox.net/webtoolbox/datum/datum-gueltig.htm -->
+  function PruefeDatum(datumFeld)
   {
   
       //  Datum = document.getElementById(datumFeld).value;
