@@ -169,6 +169,7 @@ div.person.female > div {
 div.person img {
 	max-width: 40px;
 	max-height: 40px;
+	margin-right: 4px;
 	float: left;
 }
 
@@ -347,6 +348,7 @@ div.detailbox dd {
 div.detailbox img {
 	max-width: 80px;
 	max-height: 80px;
+	margin-right: 4px;
 	float: left;
 }
 
