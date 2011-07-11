@@ -418,6 +418,10 @@ div.detailbox p.sonstiges {
 	text-decoration: none;
 }
 
+.errormsg {
+	color: #FF0000;
+}
+
 /**
  * Dialoge
  */
