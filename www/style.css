@@ -387,6 +387,7 @@ div.detailbox p.sonstiges {
 
 .btn:hover {
 	background-color: #111;
+	color: #FFF;
 }
 
 .btn.primary {
@@ -423,7 +424,7 @@ div.detailbox p.sonstiges {
 #dialog-container ul {
 	padding-left: 20px;
 	margin-bottom: 10px;
-	list-style-type: square;
+	list-style-type: disc;
 }
 
 .buttons {
@@ -457,10 +458,10 @@ div.detailbox p.sonstiges {
 input.permalink {
 	width: 100%;
 	border: 1px solid #222;
-	margin: 5px 0;
+	margin: 0 0 15px 0;
 }
 
-ul.share {
+#dialog-container ul.share {
 	padding: 0;
 	list-style-type: none;
 }
