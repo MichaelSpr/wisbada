@@ -5,7 +5,7 @@ function getElementsByClassName(string) {
 		var thisElem = elements[i];
 		if (thisElem.classList && thisElem.classList.toString() == string) {
 			elementArray[elementArray.length] = thisElem;
-		} else if (thisElem.className && thisElem.className.toString() == string) {
+		} else if (thisElem.className.baseVal && thisElem.className.baseVal.toString() == string) {
 			elementArray[elementArray.length] = thisElem;
 		}
 	}
@@ -22,8 +22,8 @@ function getMaxLevel() {
 			var value = parseInt(thisElem.classList.toString().match(/level_(.*)/)[1]);
 			if( maxLevel < value)
 				maxLevel = value;
-		} else if (thisElem.className && thisElem.className.toString().match(/level_.*/)) {
-			var value = parseInt(thisElem.className.toString().match(/level_(.*)/)[1]);
+		} else if (thisElem.className.baseVal && thisElem.className.baseVal.toString().match(/level_.*/)) {
+			var value = parseInt(thisElem.className.baseVal.toString().match(/level_(.*)/)[1]);
 			if( maxLevel < value)
 				maxLevel = value;
 		}
@@ -47,7 +47,7 @@ function checkColl(elements,parentElements) {
 	for(var i = 0; i < (elements.length -1); i++) {
 		var collArray = new Array();
 		//get x value out of the transform attribute of the g.person
-		var value1 = parseInt(elements[i].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),.*\)/)[1]);
+		var value1 = parseInt(elements[i].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),?.*\)/)[1]);
 		//console.log(value1);
 		//detect collision
 		
@@ -56,7 +56,7 @@ function checkColl(elements,parentElements) {
 			if (i == a)
 				break;
 				
-			var value2 = parseInt(elements[a].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),.*\)/)[1]);
+			var value2 = parseInt(elements[a].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),?.*\)/)[1]);
 			//+translate der parents
 			
 			//Bereich absuchen
