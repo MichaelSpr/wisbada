@@ -81,6 +81,20 @@ body {
 	color: #DDD;
 }
 
+/* Basic Text Styling */
+p {
+	margin-bottom: 10px;
+	line-height: 1.5em;
+}
+
+a {
+	color: #000000;
+}
+
+a:hover {
+	color: #95bd09;
+}
+
 /* the main board */
 #board {
 	background-color: #FFFFFF;
@@ -271,7 +285,7 @@ div.person > div:hover > a.action {
 	display: block;
 }
 
-div.person  a.action span {
+div.person  a.action span, #quickstart span.action span {
 	display: block;
 	width: 32px;
 	height: 32px;
@@ -280,15 +294,15 @@ div.person  a.action span {
 	overflow: hidden;
 }
 
-div.person  a.addParent span, div.person  a.addPartner span, div.person  a.addChild span {
+div.person  a.addParent span, div.person  a.addPartner span, div.person  a.addChild span, #quickstart span.addParent span, #quickstart span.addPartner span, #quickstart span.addChild span {
 	background-position: -32px 0;
 }
 
-div.person  a.edit span {
+div.person  a.edit span, #quickstart span.edit span {
 	background-position: -64px 0;
 }
 
-div.person  a.del span {
+div.person  a.del span, #quickstart span.del span {
 	background-position: -96px 0;
 }
 
@@ -395,11 +409,21 @@ div.detailbox p.sonstiges {
 	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;
 	padding: 8px;
 }
-#dialog-container  h3 {
+#dialog-container  h3, #dialog-container  h4 {
 	font-size: 1.2em;
 	font-weight: bold;
 	margin: 0 0 10px 0;
 	color: #95bd09;
+}
+
+#dialog-container  h4 {
+	font-size: 1em;
+}
+
+#dialog-container ul {
+	padding-left: 20px;
+	margin-bottom: 10px;
+	list-style-type: square;
 }
 
 .buttons {
@@ -427,16 +451,18 @@ div.detailbox p.sonstiges {
 /**
  * Dialoge
  */
-#dialog-container h4 {
-	font-weight: bold;
-	margin: 10px 0 4px 0;
-}
+
 
 /* Share */
 input.permalink {
 	width: 100%;
 	border: 1px solid #222;
 	margin: 5px 0;
+}
+
+ul.share {
+	padding: 0;
+	list-style-type: none;
 }
 
 ul.share li {
@@ -465,6 +491,32 @@ ul.share .xing span {
 }
 ul.share .vz span {
 	background-position: -128px 0;
+}
+
+/* Quickstart */
+#quickstart {
+	max-width: 960px;
+}
+
+#quickstart span.action {
+	display: inline-block;
+	vertical-align: middle;
+	-moz-transform: scale(0.7); -webkit-transform: scale(0.7); -ms-transform: scale(0.7); -o-transform: scale(0.7); transform: scale(0.7);
+	width: 23px; height: 23px;
+}
+
+#quickstart span.action span {
+	margin: -4px 0 0 -4px;
+}
+
+#quickstart strong.produktname {
+	font-weight: 500;
+	color: #95bd09;
+}
+
+#quickstart em.controlElement {
+	font-style: normal;
+	font-weight: bold;
 }
 
 /* Editor */

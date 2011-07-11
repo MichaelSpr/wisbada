@@ -335,7 +335,7 @@ STAMMBAUM.events.onLinkShare = function() {
 }
 
 STAMMBAUM.events.onLinkQuickstart = function() {
-	return STAMMBAUM.view.ajaxDialog("static/quickstart.html", {'title': 'Anleitung' });
+	return STAMMBAUM.view.ajaxDialog("static/quickstart.html", {'title': 'Erste Schritte mit WISBADA' });
 }
 
 STAMMBAUM.events.onLinkImpressum = function() {
