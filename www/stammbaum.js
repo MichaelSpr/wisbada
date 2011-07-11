@@ -147,18 +147,6 @@ STAMMBAUM.helper.log = function(msg) {
 	if ( typeof console == 'object' ) { console.log ( msg ); }
 }
 
-STAMMBAUM.helper.toXML = function (xml) {
-	var str = "";
-    if (xml.xml) {
-        str = xml.xml;
-    } else if (window.XMLSerializer) {
-		try {
-			str = (new window.XMLSerializer()).serializeToString(xml);
-		} catch(e) {}
-    }
-    return str;
-}
-
 STAMMBAUM.helper.parseURL = function(queryStr) {
 	var a = queryStr.substr(1).split('&');
 	if (a == "") return {};
@@ -193,13 +181,15 @@ STAMMBAUM.view.dialog = function(data, options) {
 		overlayId: 'dialog-overlay',
 		containerId: 'dialog-container',
 		minWidth: '50%',
+		maxWidth: '80%',
+		maxHeight: '80%',
 		overlayClose: true,
 		onOpen: function (dialog) {
 			dialog.overlay.fadeIn('slow', function () {
 				dialog.data.show();
 				dialog.container.fadeIn('fast');
 				dialog.container.width( dialog.data.width() );
-				dialog.container.height( dialog.data.height() );
+				dialog.container.height( Math.min( dialog.data.height(), dialog.overlay.innerHeight() - 100 ) );
 			});
 		},
 		onClose: function (dialog) {
@@ -268,15 +258,13 @@ STAMMBAUM.events.onLinkHTML = function() {
 }
 
 STAMMBAUM.events.onLinkExport = function() {
-	$.post("../index.php", 
-		{ page: "GET", outputStyle: 'xml' },
-		function(result) {
-			var xml = STAMMBAUM.helper.toXML(result.documentElement);
-			STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ xml +'</textarea>', { 'title': 'Export', 'buttons': [{'title': 'Abbrechen'}] } );
-				
+	$.ajax( { url: "../index.php",
+		data: { page: "GET", outputStyle: 'xml' },
+		dataType : 'text',
+		success: function(result) {
+			STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;">'+ result +'</textarea>', { 'title': 'Export', 'buttons': [{'title': 'Abbrechen'}] } );
 		}
-	);
-	
+	});	
 }
 
 STAMMBAUM.events.onLinkImport = function() {
