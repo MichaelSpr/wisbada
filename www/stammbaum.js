@@ -275,8 +275,9 @@ STAMMBAUM.events.onLinkExport = function() {
 }
 
 STAMMBAUM.events.onLinkImport = function() {
-		
-	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;" id="xmlimportdata"></textarea>',
+	
+	var tHeight;
+	STAMMBAUM.view.dialog('<textarea style="width: 100%; height: 200px;"></textarea><p id="errormsg" style="color:#FF0000;display:hidden;">&nbsp;</p>',
 						{'title': "Import",
 						 'buttons': [
 							{'title': 'Abbrechen'},
@@ -302,9 +303,15 @@ STAMMBAUM.events.onLinkImport = function() {
 											STAMMBAUM.events.loadWithRootPerson();
 										}
 										else
-										{
-											STAMMBAUM.helper.log('IMPORT: failed\n' + result);
-											STAMMBAUM.view.dialog( '<p>'+result+'</p>', {'title': 'Fehler beim Importvorgang!'});
+										{	
+											var s = $('#simplemodal-data');
+											t = dialog.data.find('textarea');
+											var p = dialog.data.find('p');
+											var b = dialog.data.find('.buttons');
+											var h = dialog.data.find('h3')
+											if (tHeight==null) tHeight = t.height() + p.height();
+											p.html(result).show();
+											t.height( (tHeight - p.outerHeight()) );
 										}
 									}
 								);
