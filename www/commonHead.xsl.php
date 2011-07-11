@@ -95,6 +95,9 @@
 						</xsl:attribute>
 						<xsl:call-template name="stammbaum" />
 					</div>
+					<div id="copyleft">
+						<a href="static/impressum.html" id="lnkimpressum">Impressum</a>
+					</div>
 				</div>
 			</body>
 		</html>

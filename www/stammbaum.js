@@ -242,6 +242,11 @@ STAMMBAUM.view.dialog = function(data, options) {
 	
 }
 
+STAMMBAUM.view.ajaxDialog = function(url, options) {
+	var cnt = jQuery("<div></div>").load(url, function() { STAMMBAUM.view.dialog(cnt, options); });
+	return false;
+}
+
 STAMMBAUM.events.onLinkNew = function() {
 	// TODO: Fix this. We need to determin the location somehow different
 	document.location = (document.location.pathname)
@@ -335,7 +340,11 @@ STAMMBAUM.events.onLinkShare = function() {
 }
 
 STAMMBAUM.events.onLinkQuickstart = function() {
-	STAMMBAUM.view.dialog("<p>&hellip;</p>", {'title': 'Anleitung' });
+	return STAMMBAUM.view.ajaxDialog("static/quickstart.html", {'title': 'Anleitung' });
+}
+
+STAMMBAUM.events.onLinkImpressum = function() {
+	return STAMMBAUM.view.ajaxDialog("static/impressum.html", {'title': 'Impressum' });
 }
 
 STAMMBAUM.events.onDeletePerson = function(personId) {
@@ -478,7 +487,8 @@ STAMMBAUM.events.hookEvents = function() {
 	$('#lnkexport').click( STAMMBAUM.events.onLinkExport );
 	$('#lnkimport').click( STAMMBAUM.events.onLinkImport );
 	$('#lnkshare').click( STAMMBAUM.events.onLinkShare );
-	$('#lnkquickstart').click( STAMMBAUM.events.onLinkQuickstart );
+	$('#lnkquickstart').click( function() { return STAMMBAUM.events.onLinkQuickstart(); } );
+	$('#lnkimpressum').click( function() { return STAMMBAUM.events.onLinkImpressum(); } );
 	
 	$('.action.edit').click( function() { STAMMBAUM.events.onEditPerson($(this).attr('data-id')); return false; } );
 	$('.action.del').click( function() { STAMMBAUM.events.onDeletePerson($(this).attr('data-id')); return false; } );
