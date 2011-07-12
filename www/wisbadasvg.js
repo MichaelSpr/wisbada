@@ -61,9 +61,9 @@ function checkColl(elements,parentElements) {
 			if(value1 < value2 +90) {
 				var m=0;
 				
-				if (value1+10<value2)
+				if (value1+10 < value2)
 					m=parseInt(((value1-value2)/200)-0.5);
-				
+				console.log(m);
 				for(m;m<(i-a); m++){
 					collArray[collArray.length] = value1;
 				}
@@ -257,6 +257,11 @@ function drawBar(parent, count) {
 	for(var a = 0; a < parent.childNodes.length; a++) {
 		var thisElem = parent.childNodes[a];
 		if (thisElem.classList && thisElem.classList.toString() == "balken") {
+			bar = thisElem;
+			x = parseInt(bar.getAttribute("x"));
+			y = parseInt(bar.getAttribute("y"));
+			break;
+		}else if(thisElem.className.baseVal && thisElem.className.baseVal.toString() == "balken"){
 			bar = thisElem;
 			x = parseInt(bar.getAttribute("x"));
 			y = parseInt(bar.getAttribute("y"));
