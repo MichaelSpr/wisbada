@@ -48,47 +48,33 @@ function checkColl(elements,parentElements) {
 		var collArray = new Array();
 		//get x value out of the transform attribute of the g.person
 		var value1 = parseInt(elements[i].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),?.*\)/)[1]);
-		//console.log(value1);
-		//detect collision
 		
+		//detect collision
 		for(var a= saveA; a < elements.length; a++) {
 			
 			if (i == a)
 				break;
 				
 			var value2 = parseInt(elements[a].getElementsByTagName("g")[0].getAttribute("transform").match(/translate\((.*),?.*\)/)[1]);
-			//+translate der parents
 			
 			//Bereich absuchen
-			//if(value1 < (value2 +100) && value1 > (value2 -10)) {
-			
-			if((value1 > value2 -10 )&& (value1 <= value2 +50)) {
-				for(var m=0;m<(i-a); m++){
+			if(value1 < value2 +90) {
+				var m=0;
+				
+				if (value1+10<value2)
+					m=parseInt(((value1-value2)/200)-0.5);
+				
+				for(m;m<(i-a); m++){
 					collArray[collArray.length] = value1;
-					//console.log("minus: " + (i-a));
-					/*
-					var isin = false;
-					for( var b = 0; b < collArray.length; b++) {
-						if(collArray[b] == value1){
-							isin = true;
-							collArray[b] = 1;
-						}
-					}
-					if(!isin)
-						collArray[collArray.length] = value1;
-				*/
 				}
 				break;
 			}
 		}
-		//console.log("arraySame: " + collArray);
-		//console.log("array: " + collArray);
 		
 		//Zum verschieben des obersten Parent
 		elementsPadCount += collArray.length; 
 		
 		if(parent != elements[i].parentNode.parentNode) {
-			//console.log("In translate");
 			var lastParent = parent;
 			var parentTranslate = elements[i].parentNode.parentNode;
 			parent = elements[i].parentNode.parentNode;
@@ -99,21 +85,6 @@ function checkColl(elements,parentElements) {
 				parentElements[parentCount].setAttributeNode(clone);
 				parentCount++;
 			}
-			
-			/*
-			//Für den Fall das bereits ein translate vorhanden ist
-			var translateOldVal = 0;
-			var translateOld = parent.getAttribute("transform");
-			if (translateOld != null){
-				translateOld = translateOld.match(/translate\((.*)\)/);
-				if (translateOld != null){
-					translateOldVal = parseInt(translateOld[1]);
-				}else
-					translateOldVal = 0;
-			}else
-				translateOldVal=0;
-			//console.log(translateOldVal);
-			*/
 			
 			//Der höchste parent der gewechselt wird bekommt das translate
 			var translateFlag = true;
@@ -150,9 +121,6 @@ function checkColl(elements,parentElements) {
 					tempParentTranslate = tempParentTranslate.parentNode;
 				}
 			}
-			//console.log("translateVal: " +translateVal);
-			//console.log("minus: "+translateOldVal)
-			//translateVal -= translateOldVal;
 			
 			//Für den Fall das bereits ein translate vorhanden ist
 			var translateOldVal = 0;
@@ -165,16 +133,13 @@ function checkColl(elements,parentElements) {
 					translateOldVal = 0;
 			}else
 				translateOldVal=0;
-			//console.log(translateOldVal);
 			var translateVal = (200 * collArray.length);
 			//auch die nachfolgenden und höheren verschieben wenn nicht direktes Elternattribut verändert wird
-			
 			
 				transform = document.createAttribute("transform");
 				transform.nodeValue = "translate("+(translateVal +translateOldVal) +")";
 				parentTranslate.setAttributeNode(transform);
-				//console.log(parentTranslate);
-				//console.log(parentElements[parentCount]);
+
 				if(collArray.length > 0)
 					drawBar(parentTranslate,((translateVal +translateOldVal)/200));
 				
@@ -192,8 +157,6 @@ function checkColl(elements,parentElements) {
 					var elementWTChange = elementsWalkThrough[z];
 					for(var hase=0; hase < UltimateParentCounter; hase++){
 						elementWTChange = elementWTChange.parentNode;
-						//console.log("ULT " +UltimateParentCounter);
-						//elementWTChangeOld = elementWTChangeOld.parentNode;
 					}
 					while((elementWTChange != null) && (elementWTChange.parentNode != elementWTChangeOld.parentNode)){
 						UltimateParentCounter++;
@@ -251,18 +214,15 @@ function checkColl(elements,parentElements) {
 			while(i == (elements.length-1) && parentElements[parentCount] != null){
 				var clone = document.createAttribute("transform");
 				clone.nodeValue = "translate("+(translateVal) +")";
-				//console.log(elementsPadCount);
 				if(flag||(parentElements[parentCount] != parentElements[parentCount -1])){
 					parentElements[parentCount].parentNode.setAttributeNode(clone);
 					flag=true;
-					//console.log(parentElements[parentCount].parentNode)
 				}
 				else{
 					parentElements[parentCount].setAttributeNode(clone);
 				}
 				parentCount++;
 			}
-			//console.log(parentElements[parentCount]);	
 		}
 	
 	}
